@@ -1,0 +1,8 @@
+#banner, #menu, #path, .content, #footer{
+    border: 1px solid gray;
+    margin-bottom: 5px;
+}
+
+#menu a{
+    padding: 0px;
+}
