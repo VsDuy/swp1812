@@ -8,7 +8,7 @@ export default function UserTemplate({className="container-fluid", title, childr
         <div className={className}>
             
             <Menu/>
-            <div className="row" id="path">
+            <div className="row">
                 <h3>{title}</h3>
             </div>
             {children}

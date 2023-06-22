@@ -4,8 +4,11 @@ import AboutUs from "./screens/AboutUs";
 import Home from "./screens/Home";
 import Register  from "./screens/Register";
 import Login from "./screens/Login";
-import UserManager from "./screens/UserManager";
+import Manager from "./screens/ManagerServiceList";
 import "bootstrap/dist/css/bootstrap.min.css"
+import ManagerServiceList from "./screens/ManagerServiceList";
+import ManagerAccountList from "./screens/ManagerAccountList";
+
 
 
 function App() {
@@ -15,9 +18,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/about-us" element={<AboutUs/>}/>
-          <Route path="/user_manager" element={<UserManager/>}/>
+          <Route path="/manager_service" element={<ManagerServiceList/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/logout" element={<Register/>}/>
+          <Route path="/manager_account" element={<ManagerAccountList/>}/>
+          
         </Routes>
       </BrowserRouter>
     </React.Fragment>

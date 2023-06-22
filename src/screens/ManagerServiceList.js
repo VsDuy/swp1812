@@ -1,16 +1,15 @@
 import { Container, Row, Col, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { PencilSquare, Trash3Fill } from "react-bootstrap-icons";
-import { useEffect, useState } from "react";
-import UserTemplate from "../templates/UserTemplate";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import UserTemplate from "../templates/UserTemplate";
 
 
-export default function UserManager() {
+export default function ManagerServiceList() {
     return (
-   <Container>
+        <UserTemplate>
             <button id="c">ADD NEW</button>
             <Row>
 
@@ -46,13 +45,16 @@ export default function UserManager() {
                         placeholder="Caterory services manager"
                         disabled
                         readOnly
+
                     />
-                    <button id="b">Eyes</button><br></br>
-                    <button id="b">Mouth</button><br></br>
-                    <button id="b">Foot</button><br></br>
-                    <button id="b">Nose</button><br></br>
-                    <button id="b">Lung</button><br></br>
-                    <button id="b">Body</button><br></br>
+                    <Button variant="outline-primary">Eyes    </Button>{' '}<br></br>
+                    <Button variant="outline-secondary" href="#">Mouth</Button>{' '}<br></br>
+                    <Button variant="outline-success" href="#">Back</Button>{' '}<br></br>
+                    <Button variant="outline-danger" href="#">Nose</Button>{' '}<br></br>
+                    <Button variant="outline-info" href="#">Foot</Button>{' '}<br></br>
+                    <Button variant="outline-light" href="#"></Button>{' '}<br></br>
+
+
 
                     <Form.Control
                         type="text"
@@ -90,7 +92,7 @@ export default function UserManager() {
 
 
 
-            </Container>
+        </UserTemplate>
     );
 }
 

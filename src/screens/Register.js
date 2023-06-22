@@ -18,25 +18,25 @@ export default function RegisterScreen() {
     const [address, setAddress] = useState("");
     const nav = useNavigate();
     const handleLogin = () => {
-        if (user && password && fname && address && phone && city && email ) {
+        if (user && password && fname && address && phone && city && email) {
             alert("Register Successfull");
             nav('/');
-        }   
+        }
     }
     return (
-        
-             <Container class="container">
-               <Row className="vh-100 d-flex justify-content-center align-items-center">
-          <Col md={8} lg={6} xs={12}>
-            <div className="border border-3 border-primary"></div>
-            <Card className="shadow">
-                   
+
+        <Container class="container">
+            <Row className="vh-100 d-flex justify-content-center align-items-center">
+                <Col md={8} lg={6} xs={12}>
+                    <div className="border border-3 border-primary"></div>
+                    <Card className="shadow">
+
                         <Card.Header style={{ background: "#eee" }}>
                             <Card.Title>User Registration</Card.Title>
                         </Card.Header>
-                            
+
                         <Card.Body>
-                            
+
                             <Form>
                                 <Row>
                                     <Col>
@@ -45,15 +45,15 @@ export default function RegisterScreen() {
                                             controlId="formGroupUsername"
                                         >
                                             <Form.Label>
-                                                Username 
+                                                Username
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e)=>setUser(e.target.value)}/>
-                                            
+                                            <Form.Control type="text" onChange={(e) => setUser(e.target.value)} />
+
                                         </Form.Group>
-                                        <p style={{color:'red'}}>{user ? "" : "Please enter username"}</p>
+                                        <p style={{ color: 'red' }}>{user ? "" : "Please enter username"}</p>
                                     </Col>
                                     <Col>
                                         <Form.Group
@@ -61,15 +61,15 @@ export default function RegisterScreen() {
                                             controlId="formGroupPassword"
                                         >
                                             <Form.Label>
-                                                Password 
+                                                Password
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="password" onChange={(e)=>setPassword(e.target.value)}/>
-                                            
+                                            <Form.Control type="password" onChange={(e) => setPassword(e.target.value)} />
+
                                         </Form.Group>
-                                        <p style={{color:'red'}}>{password ? "" : "Please enter password"}</p>
+                                        <p style={{ color: 'red' }}>{password ? "" : "Please enter password"}</p>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -79,14 +79,14 @@ export default function RegisterScreen() {
                                             controlId="formGroupFullName"
                                         >
                                             <Form.Label>
-                                                Fullname 
+                                                Fullname
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e)=>setFname(e.target.value)}/>
+                                            <Form.Control type="text" onChange={(e) => setFname(e.target.value)} />
                                         </Form.Group>
-                                        <p style={{color:'red'}}>{fname ? "" : "Please enter Fullname"}</p>
+                                        <p style={{ color: 'red' }}>{fname ? "" : "Please enter Fullname"}</p>
                                     </Col>
                                     <Col>
                                         <Form.Group
@@ -94,14 +94,14 @@ export default function RegisterScreen() {
                                             controlId="formGroupEmail"
                                         >
                                             <Form.Label>
-                                                Email 
+                                                Email
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e)=>setEmail(e.target.value)}/>
+                                            <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} />
                                         </Form.Group>
-                                        <p style={{color:'red'}}>{fname ? "" : "Please enter Fullname"}</p>
+                                        <p style={{ color: 'red' }}>{fname ? "" : "Please enter Fullname"}</p>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -111,14 +111,14 @@ export default function RegisterScreen() {
                                             controlId="formGroupPhone"
                                         >
                                             <Form.Label>
-                                                Phone 
+                                                Phone
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e)=>setPhone(e.target.value)}/>
+                                            <Form.Control type="text" onChange={(e) => setPhone(e.target.value)} />
                                         </Form.Group>
-                                        <p style={{color:'red'}}>{phone ? "" : "Please enter NumberPhone"}</p>
+                                        <p style={{ color: 'red' }}>{phone ? "" : "Please enter NumberPhone"}</p>
                                     </Col>
                                     <Col>
                                         <Form.Group
@@ -126,7 +126,7 @@ export default function RegisterScreen() {
                                             controlId="formGroupCountry"
                                         >
                                             <Form.Label>
-                                                Country 
+                                                Country
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
@@ -139,7 +139,7 @@ export default function RegisterScreen() {
                                                 <option value="3">Three</option>
                                             </Form.Select>
                                         </Form.Group>
-                                        <p style={{color:'red'}}>{city ? "" : "Please choose Country"}</p>
+                                        <p style={{ color: 'red' }}>{city ? "" : "Please choose Country"}</p>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -149,9 +149,9 @@ export default function RegisterScreen() {
                                             controlId="formGroupAddress"
                                         >
                                             <Form.Label>Address</Form.Label>
-                                            <Form.Control type="text" onChange={(e)=>setAddress(e.target.value)}/>
+                                            <Form.Control type="text" onChange={(e) => setAddress(e.target.value)} />
                                         </Form.Group>
-                                        <p style={{color:'red'}}>{address ? "" : "Please enter Address"}</p>
+                                        <p style={{ color: 'red' }}>{address ? "" : "Please enter Address"}</p>
                                     </Col>
                                 </Row>
                             </Form>
@@ -163,11 +163,11 @@ export default function RegisterScreen() {
                                 justifyContent: "flex-start",
                             }}
                         >
-                           <Button onClick={handleLogin} style={{ background: "green" }}>
-                               
-                                
-                          Login
-                        
+                            <Button onClick={handleLogin} style={{ background: "green" }}>
+
+
+                                Login
+
                             </Button>
                             <Link to="/">
                                 <Button
@@ -179,11 +179,11 @@ export default function RegisterScreen() {
                             </Link>
                         </Card.Footer>
                     </Card>
-                            </Col>
-                </Row>
-            </Container>
-      
-       
-           
+                </Col>
+            </Row>
+        </Container>
+
+
+
     );
 }
