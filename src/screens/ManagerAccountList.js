@@ -6,9 +6,20 @@ import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Dropdown } from "react-bootstrap";
 import UserTemplate from "../templates/UserTemplate";
-
+import React, { useState, useEffect } from 'react';
+import Placeholder from 'react-bootstrap/Placeholder';
 
 export default function ManagerAccountList() {
+  const [account, setAccount] = useState([]);
+
+  useEffect(() => {
+     
+      fetch("http://localhost:3000/account").then(res => res.json())
+      .then(result => {
+          setAccount(result);
+      });
+  },
+[]);
   return (
     <UserTemplate>
       <Row>
@@ -68,22 +79,40 @@ export default function ManagerAccountList() {
 
 
         <Col>
-          <div className="container-fluid col-8">
+ 
+        <div className="d-flex justify-content-around">
+        
+      <Card style={{ width: '15rem' }}>
+      
+        <Card.Body>
+          <Card.Title></Card.Title>
+          <Card.Text>
+          <tbody>
+{account.map((c) => (
+  <tr>
+    {c.age}<br></br>
+    {c.name}<br></br>
+    {c.gmail}<br></br>
+    {c.phone}<br></br>
+    {c.job}<br></br>
+  
+  </tr>
+))}
+</tbody>
+          </Card.Text>
+         <td> <Button variant="primary">View User</Button></td>
+         <td> <Button variant="primary">Edit User</Button></td>
+        </Card.Body>
+      </Card>
+      
 
-            <h3 className="row" style={{ textAlign: "center" }}>List</h3>
-            <div className="row content" id="home">
-
-             
-
-
-            </div>
-
-
-          </div>
+      
+    </div>
         </Col>
       </Row>
     </UserTemplate>
   );
 }
+
 
 

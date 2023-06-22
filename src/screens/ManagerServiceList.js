@@ -10,6 +10,17 @@ import React, { useState, useEffect } from 'react';
 
 export default function ManagerServiceList() {
     const [service, setService] = useState([]);
+
+    useEffect(() => {
+       
+        fetch("http://localhost:3000/posts").then(res => res.json())
+        .then(result => {
+            setService(result);
+        });
+    },
+  []);
+
+
     return (
         <UserTemplate>
             <Button variant="outline-success" href="add_service">Add new</Button>{' '}<br></br>
@@ -84,6 +95,7 @@ export default function ManagerServiceList() {
                                         <th>Sale Price</th>
                                         <th colSpan={4}>Status</th>
                                     </tr>
+                                    </thead>
                                     <tbody>
                                     {service.map((s) => (
                                         <tr key={s.id}>
@@ -106,7 +118,7 @@ export default function ManagerServiceList() {
                                         </tr>
                                     ))}
                                       </tbody>
-                                </thead>
+                                
 
                             </Table>
                         </Col>
@@ -119,5 +131,7 @@ export default function ManagerServiceList() {
         </UserTemplate>
     );
 }
+
+
 
 
