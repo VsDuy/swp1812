@@ -8,6 +8,8 @@ import Manager from "./screens/ManagerServiceList";
 import "bootstrap/dist/css/bootstrap.min.css"
 import ManagerServiceList from "./screens/ManagerServiceList";
 import ManagerAccountList from "./screens/ManagerAccountList";
+import UserList  from "./screens/ListUser";
+import AddService from "./screens/NewSerive";
 
 
 
@@ -22,6 +24,8 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/logout" element={<Register/>}/>
           <Route path="/manager_account" element={<ManagerAccountList/>}/>
+          <Route path="/list_user" element={<UserList/>}/>
+          <Route path="/add_service" element={<AddService/>}/>
           
         </Routes>
       </BrowserRouter>

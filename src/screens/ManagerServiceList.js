@@ -5,12 +5,14 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import UserTemplate from "../templates/UserTemplate";
+import React, { useState, useEffect } from 'react';
 
 
 export default function ManagerServiceList() {
+    const [service, setService] = useState([]);
     return (
         <UserTemplate>
-            <button id="c">ADD NEW</button>
+            <Button variant="outline-success" href="add_service">Add new</Button>{' '}<br></br>
             <Row>
 
                 <Col xs={12} style={{ textAlign: "center" }}>
@@ -82,6 +84,28 @@ export default function ManagerServiceList() {
                                         <th>Sale Price</th>
                                         <th colSpan={4}>Status</th>
                                     </tr>
+                                    <tbody>
+                                    {service.map((s) => (
+                                        <tr key={s.id}>
+                                            <td>{s.id}</td>
+                                            <td>{s.thumbnail}</td>
+                                            <td>{s.titler}</td>
+                                            <td>{s.category}</td>
+                                            <td>{s.price}</td>
+                                            <td>{s.sale_price}</td>
+                                            <td>
+                                                <a href="">
+                                                    <PencilSquare />
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="">
+                                                    <Trash3Fill />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                      </tbody>
                                 </thead>
 
                             </Table>

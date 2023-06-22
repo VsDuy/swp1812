@@ -46,11 +46,11 @@ export default function ManagerAccountList() {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#">Admin</Dropdown.Item>
-              <Dropdown.Item href="#">Doctor</Dropdown.Item>
-              <Dropdown.Item href="#">Manager</Dropdown.Item>
-              <Dropdown.Item href="#">Customer</Dropdown.Item>
-              <Dropdown.Item href="#">Nurse</Dropdown.Item>
+              <Dropdown.Item href="list_user">Admin</Dropdown.Item>
+              <Dropdown.Item href="list_user">Doctor</Dropdown.Item>
+              <Dropdown.Item href="list_user">Manager</Dropdown.Item>
+              <Dropdown.Item href="list_user">Customer</Dropdown.Item>
+              <Dropdown.Item href="list_user">Nurse</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
 
@@ -73,63 +73,7 @@ export default function ManagerAccountList() {
             <h3 className="row" style={{ textAlign: "center" }}>List</h3>
             <div className="row content" id="home">
 
-              <div className="col-12 col-sm-6 product">
-                <Card style={{ width: '18rem' }}>
-                  <Card.Body>
-                    <Card.Title>Card Title</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                    <Card.Text>
-                      Some quick example text to build on the card title and make up the
-                      bulk of the card's content.
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                  </Card.Body>
-                </Card>
-              </div>
-              <div className="col-12 col-sm-6 product">
-                <Card style={{ width: '18rem' }}>
-                  <Card.Body>
-                    <Card.Title>Card Title</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                    <Card.Text>
-                      Some quick example text to build on the card title and make up the
-                      bulk of the card's content.
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                  </Card.Body>
-                </Card>
-              </div>
-              <div className="col-12 col-sm-6 product">
-                <Card style={{ width: '18rem' }}>
-                  <Card.Body>
-                    <Card.Title>Card Title</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                    <Card.Text>
-                      Some quick example text to build on the card title and make up the
-                      bulk of the card's content.
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                  </Card.Body>
-                </Card>
-              </div>
-              <div className="col-12 col-sm-6 product">
-                <Card style={{ width: '18rem' }}>
-                  <Card.Body>
-                    <Card.Title>Card Title</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                    <Card.Text>
-                      Some quick example text to build on the card title and make up the
-                      bulk of the card's content.
-                    </Card.Text>
-                    <Card.Link href="#">Card Link</Card.Link>
-                    <Card.Link href="#">Another Link</Card.Link>
-                  </Card.Body>
-                </Card>
-              </div>
-
+             
 
 
             </div>
