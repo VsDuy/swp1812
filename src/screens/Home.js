@@ -5,7 +5,7 @@ import "../styles/Default.css";
 
 export default function Home() {
     return (
-        <DefaultTemplate clasName="container">
+        <DefaultTemplate clasName="container" >
             <div className="container-fluid col-8">
 
                 <h3 className="row">Dich Vu Tieu Bieu</h3>

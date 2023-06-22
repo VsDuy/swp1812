@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import { Nav } from "react-bootstrap";
 
 export default function Menu() {
     return (
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
+            <div className="col-12 col-sm-2" class="container-fluid" >
 
-                <a>Navbar</a>
+               <h3>Children Care</h3>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -13,7 +14,7 @@ export default function Menu() {
     ">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        <Nav.Link as={Link} to="/">Home</Nav.Link>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Services</a>
@@ -27,26 +28,20 @@ export default function Menu() {
                         <li class="nav-item">
                             <a class="nav-link" href="#">Admin</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                User Manager
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Option1</a></li>
-                                <li><a class="dropdown-item" href="#">Option2</a></li>
-                                <li><a class="dropdown-item" href="#">Option3</a></li>
-                            </ul>
+                        <li class="nav-item">
+                        <Nav.Link as={Link} to="/user_manager">User Manager</Nav.Link>
                         </li>
+                        
                     </ul>
                 </div>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown" className="col-12 col-sm-5">
+                <div class="collapse navbar-collapse" id="navbarNavDropdown" className="col-12 col-sm-3">
                     <ul class="navbar-nav">
                         <li class="nav-item">
 
-                            <a class="nav-link active" aria-current="page" href="#">Login</a>
+                            <Nav.Link as={Link} to="/login">SignIn</Nav.Link>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">LogOut</a>
+                        <Nav.Link as={Link} to="/logout">SignUp</Nav.Link>
                         </li>
                     </ul>
 

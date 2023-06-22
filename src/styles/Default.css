@@ -6,3 +6,17 @@
 #menu a{
     padding: 0px;
 }
+#a {
+    background-color: rgb(15, 15, 203);
+    color: aliceblue;
+}
+#b {
+    background-color: rgb(71, 159, 232);
+    color: black;
+
+}
+#c {
+    background-color: green;
+    color:aliceblue;
+
+}

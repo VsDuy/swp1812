@@ -12,7 +12,7 @@ export default function UserTemplate({className="container-fluid", title, childr
                 <h3>{title}</h3>
             </div>
             {children}
-            <Footer/>
+         
         </div>
     );
 }
