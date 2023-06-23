@@ -1,0 +1,41 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "thumbnail": "Anh1",
+      "titler": "Apply SDF to prevent and stop the",
+      "category": "eyes",
+      "price": "150.0$",
+      "sale_price": "120.0$"
+    },
+    {
+      "id": 2,
+      "thumbnail": "Anh2",
+      "titler": "Apply SDF to prevent and stop the",
+      "category": "eyes",
+      "price": "150.0$",
+      "sale_price": "120.0$"
+    },
+    {
+      "id": 3,
+      "thumbnail": "Anh3",
+      "titler": "Apply SDF to prevent and stop the",
+      "category": "eyes",
+      "price": "150.0$",
+      "sale_price": "120.0$"
+    }
+  ],
+  "account": [
+    {
+      "age": 13,
+      "name": "Nguyen Ngoc Hoan",
+      "gmail": "Hieuvshe163680@fpt.edu.vn",
+      "phone": "0984736452",
+      "job": "Admin"
+      
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}
