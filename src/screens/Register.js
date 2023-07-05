@@ -8,6 +8,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 
+
 export default function RegisterScreen() {
     const [user, setUser] = useState("");
     const [password, setPassword] = useState("");
@@ -17,15 +18,16 @@ export default function RegisterScreen() {
     const [city, setCity] = useState("");
     const [address, setAddress] = useState("");
     const nav = useNavigate();
+
     const handleLogin = () => {
-        if (user && password && fname && address && phone && city && email) {
+        if (user && password && fname && address && city && phone && email) {
             alert("Register Successfull");
-            nav('/');
+            nav('/login');
         }
     }
     return (
 
-        <Container class="container">
+        <Container class="container" >
             <Row className="vh-100 d-flex justify-content-center align-items-center">
                 <Col md={8} lg={6} xs={12}>
                     <div className="border border-3 border-primary"></div>
@@ -131,12 +133,13 @@ export default function RegisterScreen() {
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Select required>
-                                                <option value="1">
-                                                    Vietnam
+                                            <Form.Select required onChange={(e) => setCity(e.target.value)}>
+                                                <option value="0">
+                                                    ---Choose---
                                                 </option>
-                                                <option value="2">Two</option>
-                                                <option value="3">Three</option>
+                                                <option value="1">VietNam1</option>
+                                                <option value="2">VietNam2</option>
+                                                <option value="3">VietNam3</option>
                                             </Form.Select>
                                         </Form.Group>
                                         <p style={{ color: 'red' }}>{city ? "" : "Please choose Country"}</p>
@@ -163,19 +166,20 @@ export default function RegisterScreen() {
                                 justifyContent: "flex-start",
                             }}
                         >
-                            <Button onClick={handleLogin} style={{ background: "green" }}>
-
-
-                                Login
-
-                            </Button>
+                            
+                            <button class="button"  onClick={handleLogin}>
+                                Register
+                                <div class="hoverEffect">
+                                    <div>
+                                    </div>
+                                </div></button>
                             <Link to="/">
-                                <Button
-                                    style={{ background: "red" }}
-                                    variant="primary"
-                                >
+                                <button class="button">
                                     Back
-                                </Button>
+                                    <div class="hoverEffect">
+                                        <div>
+                                        </div>
+                                    </div></button>
                             </Link>
                         </Card.Footer>
                     </Card>

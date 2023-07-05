@@ -10,7 +10,8 @@ import ManagerServiceList from "./screens/ManagerServiceList";
 import ManagerAccountList from "./screens/ManagerAccountList";
 import UserList  from "./screens/ListUser";
 import AddService from "./screens/NewSerive";
-
+import EditList from "./screens/EditList";
+import Service from "./screens/Service";
 
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
           <Route path="/manager_account" element={<ManagerAccountList/>}/>
           <Route path="/list_user" element={<UserList/>}/>
           <Route path="/add_service" element={<AddService/>}/>
+          <Route path="/edit" element={<EditList/>}/>
+          <Route path="/service_list" element={<Service/>}/>
           
         </Routes>
       </BrowserRouter>

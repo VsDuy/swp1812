@@ -34,13 +34,13 @@ export default function Login() {
                         <Form.Control type="text" onChange={(e) => setUser(e.target.value)} />
                       </Form.Group>
                       <p style={{ color: 'red' }}>{user ? "" : "Please enter username"}</p>
-                        
+
                       <Form.Group
                         className="mb-3"
                         controlId="formBasicPassword"
                       >
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="text" onChange={(e) => setPassword(e.target.value)} />
+                        <Form.Control type="password" onChange={(e) => setPassword(e.target.value)} />
                       </Form.Group>
                       <p style={{ color: 'red' }}>{password ? "" : "Please enter password"}</p>
                       <Form.Group
@@ -54,9 +54,12 @@ export default function Login() {
                         </p>
                       </Form.Group>
                       <div className="d-grid">
-                        <Button onClick={handleLogin}>
+                        <button class="button" onClick={handleLogin}>
                           Login
-                        </Button>
+                          <div class="hoverEffect">
+                            <div>
+                            </div>
+                          </div></button>
                       </div>
                     </Form>
 

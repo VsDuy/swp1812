@@ -5,7 +5,7 @@ import '../styles/Default.css';
 
 export default function UserTemplate({className="container-fluid", title, children}){
     return (
-        <div className={className}>
+        <div className={className} >
             
             <Menu/>
             <div className="row">

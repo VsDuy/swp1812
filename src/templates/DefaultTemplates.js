@@ -5,7 +5,7 @@ import '../styles/Default.css';
 
 export default function DefaultTemplate({className="container-fluid", title, children}){
     return (
-        <div className={className}>
+        <div className={className} style={{backgroundColor:'#e3f2fd'}}>
             <Menu/>
             <Banner/>
             <div className="row" id="path">

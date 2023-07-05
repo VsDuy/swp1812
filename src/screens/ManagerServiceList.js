@@ -13,7 +13,7 @@ export default function ManagerServiceList() {
 
     useEffect(() => {
        
-        fetch("http://localhost:3000/posts").then(res => res.json())
+        fetch("http://localhost:8000/posts").then(res => res.json())
         .then(result => {
             setService(result);
         });
@@ -75,8 +75,8 @@ export default function ManagerServiceList() {
                         disabled
                         readOnly
                     />
-                    <button id="b">Sort by price</button><br></br>
-                    <button id="b">Sort by discount price</button><br></br>
+                   <Button variant="outline-primary">Sort by Price    </Button>{' '}<br></br>
+                   <Button variant="outline-secondary">Sort by discount Price   </Button>{' '}<br></br>
                 </Col>
 
                 <Col xs={8}>
@@ -89,7 +89,7 @@ export default function ManagerServiceList() {
                                     <tr>
                                         <th>#ID</th>
                                         <th>Thumbnail</th>
-                                        <th>Title</th>
+                                        <th>Tittle</th>
                                         <th>Category</th>
                                         <th>Price</th>
                                         <th>Sale Price</th>
@@ -101,12 +101,12 @@ export default function ManagerServiceList() {
                                         <tr key={s.id}>
                                             <td>{s.id}</td>
                                             <td>{s.thumbnail}</td>
-                                            <td>{s.titler}</td>
+                                            <td>{s.tittle}</td>
                                             <td>{s.category}</td>
                                             <td>{s.price}</td>
                                             <td>{s.sale_price}</td>
                                             <td>
-                                                <a href="">
+                                                <a href="edit">
                                                     <PencilSquare />
                                                 </a>
                                             </td>
