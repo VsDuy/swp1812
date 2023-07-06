@@ -32,10 +32,15 @@
       "gmail": "Hieuvshe163680@fpt.edu.vn",
       "phone": "0984736452",
       "job": "Admin"
-      
     }
   ],
   "profile": {
     "name": "typicode"
-  }
+  },
+  "feedback": [
+    {
+      "name": "Vuong Sy Duy",
+      "content": "The website sometimes delay, You should make it better"
+    }
+  ]
 }

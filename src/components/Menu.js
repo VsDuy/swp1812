@@ -14,7 +14,7 @@ export default function Menu() {
                 <div class="collapse navbar-collapse" id="navbarNavDropdown" className="col-12 col-sm-7
     ">
                     <ul class="navbar-nav">
-                        <li class="nav-item" style={{marginTop:5 , marginRight:5}} >
+                        <li class="nav-item" style={{ marginTop: 5, marginRight: 5 }} >
                             <a href="/">
                                 <House />
                             </a>
@@ -30,6 +30,9 @@ export default function Menu() {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Admin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="feedback">Feedback</a>
                         </li>
                         <li class="nav-item dropdown">
                             <Dropdown>
