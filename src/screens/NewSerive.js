@@ -39,7 +39,7 @@ export default function AddService() {
             data
         )
             .then((response) => {
-                if(response.data.status == 202){
+                if(response.data.status == 202 || response.data.status == 200){
                     alert('Add Ok')
                 }
                 console.log(response.data);
