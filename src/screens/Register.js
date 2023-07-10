@@ -17,7 +17,10 @@ export default function RegisterScreen() {
     const [phone, setPhone] = useState("");
     const [city, setCity] = useState("");
     const [address, setAddress] = useState("");
+    const [birthday, setBirthday] = useState('');
     const nav = useNavigate();
+
+   
 
     const handleLogin = () => {
         if (user && password && fname && address && city && phone && email) {
@@ -25,6 +28,7 @@ export default function RegisterScreen() {
             nav('/login');
         }
     }
+    
     return (
 
         <Container class="container" >
@@ -44,18 +48,17 @@ export default function RegisterScreen() {
                                     <Col>
                                         <Form.Group
                                             className="mb-3"
-                                            controlId="formGroupUsername"
+                                            controlId="formGroupEmail"
                                         >
                                             <Form.Label>
-                                                Username
+                                                Email
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e) => setUser(e.target.value)} />
-
+                                            <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} />
                                         </Form.Group>
-                                        <p style={{ color: 'red' }}>{user ? "" : "Please enter username"}</p>
+                                        <p style={{ color: 'red' }}>{email ? "" : "Please enter Email"}</p>
                                     </Col>
                                     <Col>
                                         <Form.Group
@@ -91,20 +94,17 @@ export default function RegisterScreen() {
                                         <p style={{ color: 'red' }}>{fname ? "" : "Please enter Fullname"}</p>
                                     </Col>
                                     <Col>
-                                        <Form.Group
-                                            className="mb-3"
-                                            controlId="formGroupEmail"
-                                        >
+                                       <Form.Group className="mb-3"
+                                            controlId="formGroupDob">
                                             <Form.Label>
-                                                Email
-                                                <span style={{ color: "red" }}>
-                                                    *
-                                                </span>
+                                            Date of Birth:
+                                              
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} />
+                                            <Form.Control type="Date" onChange={(e) => setBirthday(e.target.value)} />
+                                            <p style={{ color: 'red' }}>{birthday ? "" : "Please enter Date of birth"}</p>
                                         </Form.Group>
-                                        <p style={{ color: 'red' }}>{fname ? "" : "Please enter Fullname"}</p>
                                     </Col>
+
                                 </Row>
                                 <Row>
                                     <Col>
@@ -122,6 +122,20 @@ export default function RegisterScreen() {
                                         </Form.Group>
                                         <p style={{ color: 'red' }}>{phone ? "" : "Please enter NumberPhone"}</p>
                                     </Col>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formGroupAddress"
+                                        >
+                                            <Form.Label>Address</Form.Label>
+                                            <Form.Control type="text" onChange={(e) => setAddress(e.target.value)} />
+                                        </Form.Group>
+                                        <p style={{ color: 'red' }}>{address ? "" : "Please enter Address"}</p>
+                                    </Col>
+
+                                </Row>
+                                <Row>
+
                                     <Col>
                                         <Form.Group
                                             className="mb-3"
@@ -145,18 +159,6 @@ export default function RegisterScreen() {
                                         <p style={{ color: 'red' }}>{city ? "" : "Please choose Country"}</p>
                                     </Col>
                                 </Row>
-                                <Row>
-                                    <Col>
-                                        <Form.Group
-                                            className="mb-3"
-                                            controlId="formGroupAddress"
-                                        >
-                                            <Form.Label>Address</Form.Label>
-                                            <Form.Control type="text" onChange={(e) => setAddress(e.target.value)} />
-                                        </Form.Group>
-                                        <p style={{ color: 'red' }}>{address ? "" : "Please enter Address"}</p>
-                                    </Col>
-                                </Row>
                             </Form>
                         </Card.Body>
 
@@ -166,8 +168,8 @@ export default function RegisterScreen() {
                                 justifyContent: "flex-start",
                             }}
                         >
-                            
-                            <button class="button"  onClick={handleLogin}>
+
+                            <button class="button" onClick={handleLogin}>
                                 Register
                                 <div class="hoverEffect">
                                     <div>

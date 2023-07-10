@@ -12,13 +12,13 @@ export default function ManagerServiceList() {
     const [service, setService] = useState([]);
 
     useEffect(() => {
-       
+
         fetch("http://localhost:8000/posts").then(res => res.json())
-        .then(result => {
-            setService(result);
-        });
+            .then(result => {
+                setService(result);
+            });
     },
-  []);
+        []);
 
 
     return (
@@ -75,8 +75,8 @@ export default function ManagerServiceList() {
                         disabled
                         readOnly
                     />
-                   <Button variant="outline-primary">Sort by Price    </Button>{' '}<br></br>
-                   <Button variant="outline-secondary">Sort by discount Price   </Button>{' '}<br></br>
+                    <Button variant="outline-primary">Sort by Price    </Button>{' '}<br></br>
+                    <Button variant="outline-secondary">Sort by discount Price   </Button>{' '}<br></br>
                 </Col>
 
                 <Col xs={8}>
@@ -95,8 +95,8 @@ export default function ManagerServiceList() {
                                         <th>Sale Price</th>
                                         <th colSpan={4}>Status</th>
                                     </tr>
-                                    </thead>
-                                    <tbody>
+                                </thead>
+                                <tbody>
                                     {service.map((s) => (
                                         <tr key={s.id}>
                                             <td>{s.id}</td>
@@ -117,8 +117,8 @@ export default function ManagerServiceList() {
                                             </td>
                                         </tr>
                                     ))}
-                                      </tbody>
-                                
+                                </tbody>
+
 
                             </Table>
                         </Col>

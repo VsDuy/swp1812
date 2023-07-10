@@ -44,7 +44,7 @@ export default function Service() {
                                 <tr>{p.vote}</tr>
                                 <tr>{p.re_name}</tr><br></br>
                                 <td>{p.price}</td><br></br>
-                          <Button variant="outline-success" href="add_service">Details Service</Button>{' '}<br>
+                          <Button variant="outline-success" href="details_service">Details Service</Button>{' '}<br>
                           </br>
                           <Button variant="outline-success" href="add_service">Book Service</Button>{' '}
                             </tr>

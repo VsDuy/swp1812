@@ -23,17 +23,17 @@ export default function Login() {
             <Card className="shadow">
               <Card.Body>
                 <div className="mb-3 mt-md-4">
-                  <h2 className="fw-bold mb-2 text-uppercase ">Username</h2>
+                  <h2 className="fw-bold mb-2 text-uppercase ">Login</h2>
 
                   <div className="mb-3">
                     <Form>
                       <Form.Group className="mb-3" controlId="user">
                         <Form.Label className="text-center">
-                          Username
+                          Email
                         </Form.Label>
                         <Form.Control type="text" onChange={(e) => setUser(e.target.value)} />
                       </Form.Group>
-                      <p style={{ color: 'red' }}>{user ? "" : "Please enter username"}</p>
+                      <p style={{ color: 'red' }}>{user ? "" : "Please enter email !"}</p>
 
                       <Form.Group
                         className="mb-3"
@@ -42,7 +42,7 @@ export default function Login() {
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" onChange={(e) => setPassword(e.target.value)} />
                       </Form.Group>
-                      <p style={{ color: 'red' }}>{password ? "" : "Please enter password"}</p>
+                      <p style={{ color: 'red' }}>{password ? "" : "Please enter password !"}</p>
                       <Form.Group
                         className="mb-3"
                         controlId="formBasicCheckbox"
