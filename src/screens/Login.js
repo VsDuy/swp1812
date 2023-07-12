@@ -1,19 +1,66 @@
-import { Col, Button, Row, Container, Card, Form } from "react-bootstrap";
+import {
+  Col,
+  Button,
+  Row,
+  Container,
+  Card,
+  Form,
+  Toast,
+} from "react-bootstrap";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { login } from "../service/userService";
 export default function Login() {
+  const [loginDetail, setLoginDetail] = useState({
+    email: "",
+    password: "",
+  });
+  // const nav = useNavigate();
 
-  const [user, setUser] = useState("");
-  const [password, setPassword] = useState("");
-  const nav = useNavigate();
+  const handleChange = (event, field) => {
+    let actualValue = event.target.value;
+    setLoginDetail({
+      ...loginDetail,
+      [field]: actualValue,
+    });
+  };
 
+  // const handleReset = (event, field) => {
+  //   setLoginDetail({
+  //     email: "",
+  //     password: "",
+  //   });
+  // };
 
-  const handleLogin = () => {
-    if (user && password) {
-      alert("Login success");
-      nav('/');
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    console.log(loginDetail);
+
+    //validation
+    if (loginDetail.email.trim() == "" || loginDetail.password.trim() == "") {
+      toast.error("Please enter your email and password!");
+      return;
     }
-  }
+
+    //submit data lên sv bằng token
+
+    login(loginDetail)
+      .then((jwtTokenData) => {
+        console.log("User login: ");
+        console.log(jwtTokenData);
+        toast.success("Login successful");
+      })
+      .catch((error) => {
+        console.log("error");
+        if (error.response.status == 400 || error.response.status == 404) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("Something went wrong");
+        }
+      });
+  };
+
   return (
     <div>
       <Container>
@@ -26,23 +73,30 @@ export default function Login() {
                   <h2 className="fw-bold mb-2 text-uppercase ">Login</h2>
 
                   <div className="mb-3">
-                    <Form>
-                      <Form.Group className="mb-3" controlId="user">
-                        <Form.Label className="text-center">
-                          Email
-                        </Form.Label>
-                        <Form.Control type="text" onChange={(e) => setUser(e.target.value)} />
+                    <Form onSubmit={handleFormSubmit}>
+                      <Form.Group className="mb-3" controlId="email">
+                        <Form.Label className="text-center">Email</Form.Label>
+                        <Form.Control
+                          type="text"
+                          id="email"
+                          value={loginDetail.email}
+                          onChange={(e) => handleChange(e, "email")}
+                        />
                       </Form.Group>
-                      <p style={{ color: 'red' }}>{user ? "" : "Please enter email !"}</p>
 
                       <Form.Group
                         className="mb-3"
                         controlId="formBasicPassword"
                       >
                         <Form.Label>Password</Form.Label>
-                        <Form.Control type="password" onChange={(e) => setPassword(e.target.value)} />
+                        <Form.Control
+                          type="password"
+                          id="password"
+                          value={loginDetail.password}
+                          onChange={(e) => handleChange(e, "password")}
+                        />
                       </Form.Group>
-                      <p style={{ color: 'red' }}>{password ? "" : "Please enter password !"}</p>
+
                       <Form.Group
                         className="mb-3"
                         controlId="formBasicCheckbox"
@@ -54,15 +108,14 @@ export default function Login() {
                         </p>
                       </Form.Group>
                       <div className="d-grid">
-                        <button class="button" onClick={handleLogin}>
+                        <button class="button" onClick={handleChange}>
                           Login
                           <div class="hoverEffect">
-                            <div>
-                            </div>
-                          </div></button>
+                            <div></div>
+                          </div>
+                        </button>
                       </div>
                     </Form>
-
                   </div>
                 </div>
               </Card.Body>
@@ -73,4 +126,3 @@ export default function Login() {
     </div>
   );
 }
-
