@@ -6,23 +6,51 @@ import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-
+import Axios from "axios";
 
 export default function AddService() {
-    const [user, setUser] = useState("");
-    const [password, setPassword] = useState("");
-    const [fname, setFname] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [city, setCity] = useState("");
-    const [address, setAddress] = useState("");
-    const nav = useNavigate();
-    const handleLogin = () => {
-        if (user && password && fname  && phone && email) {
-            alert("Add Successfull");
-            nav('manager_service');
-        }
-    }
+    let [title, settitle] = useState("");
+    let [bi, setbi] = useState("");
+    let [createddate, setcreateddate] = useState("");
+    let [categoryid, setcategoryid] = useState("");
+    let [price, setprice] = useState("");
+    let [discount, setdiscount] = useState("");
+    let [detail, setdetail] = useState("");
+    let [vote, setvote] = useState("");
+    let [imagelink, setimagelink] = useState("");
+    let [status, setstatus] = useState("");
+   
+
+    let AddnewService = () => {
+        let data = {
+            title: `${title}`,
+            bi: `${bi}`,
+            createddate: `${createddate}`,
+            categoryid: `${categoryid}`,
+            price:`${price}`,
+            discount: `${discount}`,
+            detail: `${detail}`,
+            vote: `${vote}`,
+            imagelink: `${imagelink}`,
+            status: `${status}`
+        };
+        Axios.post(
+            "http://localhost:8080/api/Service/Service/listservices/addservice",
+            data
+        )
+            .then((response) => {
+                if(response.data.status == 202 || response.data.status == 200){
+                    alert('Add Ok')
+                }
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
+
+
+
     return (
 
         <Container class="container">
@@ -45,28 +73,12 @@ export default function AddService() {
                                             controlId="formGroupUsername"
                                         >
                                             <Form.Label>
-                                                Thumbnail
-                                                <span style={{ color: "red" }}>
-                                                    *
-                                                </span>
-                                            </Form.Label>
-                                            <Form.Control type="text" onChange={(e) => setUser(e.target.value)} />
-
-                                        </Form.Group>
-
-                                    </Col>
-                                    <Col>
-                                        <Form.Group
-                                            className="mb-3"
-                                            controlId="formGroupPassword"
-                                        >
-                                            <Form.Label>
                                                 Title
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e) => setPassword(e.target.value)} />
+                                            <Form.Control type="text" onChange={(e) =>settitle(e.target.value) } />
 
                                         </Form.Group>
 
@@ -76,30 +88,16 @@ export default function AddService() {
                                     <Col>
                                         <Form.Group
                                             className="mb-3"
-                                            controlId="formGroupFullName"
+                                            controlId="formGroupUsername"
                                         >
                                             <Form.Label>
-                                                Category
+                                                Bio
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e) => setFname(e.target.value)} />
-                                        </Form.Group>
+                                            <Form.Control type="text" onChange={(e) =>setbi(e.target.value) } />
 
-                                    </Col>
-                                    <Col>
-                                        <Form.Group
-                                            className="mb-3"
-                                            controlId="formGroupEmail"
-                                        >
-                                            <Form.Label>
-                                                Price
-                                                <span style={{ color: "red" }}>
-                                                    *
-                                                </span>
-                                            </Form.Label>
-                                            <Form.Control type="text" onChange={(e) => setEmail(e.target.value)} />
                                         </Form.Group>
 
                                     </Col>
@@ -108,44 +106,148 @@ export default function AddService() {
                                     <Col>
                                         <Form.Group
                                             className="mb-3"
-                                            controlId="formGroupPhone"
+                                            controlId="formGroupUsername"
                                         >
                                             <Form.Label>
-                                                Sale Price
+                                                Created date
                                                 <span style={{ color: "red" }}>
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Control type="text" onChange={(e) => setPhone(e.target.value)} />
-                                        </Form.Group>
+                                            <Form.Control type="date" onChange={(e) =>setcreateddate(e.target.value) } />
 
-                                    </Col>
-                                    <Col>
-                                        <Form.Group
-                                            className="mb-3"
-                                            controlId="formGroupCountry"
-                                        >
-                                            <Form.Label>
-                                                Status
-                                                <span style={{ color: "red" }}>
-                                                    *
-                                                </span>
-                                            </Form.Label>
-                                            <Form>
-                                                <Form.Check // prettier-ignore
-                                                    type="switch"
-                                                    id="custom-switch"
-                                                    label="Checked switch checkbox input"
-                                                />
-                                                
-                                            </Form>
                                         </Form.Group>
 
                                     </Col>
                                 </Row>
                                 <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formGroupUsername"
+                                        >
+                                            <Form.Label>
+                                                categoryid
+                                                <span style={{ color: "red" }}>
+                                                    *
+                                                </span>
+                                            </Form.Label>
+                                            <Form.Control type="text" onChange={(e) =>setcategoryid(e.target.value) } />
 
+                                        </Form.Group>
+
+                                    </Col>
                                 </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formGroupUsername"
+                                        >
+                                            <Form.Label>
+                                            price
+                                                <span style={{ color: "red" }}>
+                                                    *
+                                                </span>
+                                            </Form.Label>
+                                            <Form.Control type="text" onChange={(e) =>setprice(e.target.value) } />
+
+                                        </Form.Group>
+
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formGroupUsername"
+                                        >
+                                            <Form.Label>
+                                            discount
+                                                <span style={{ color: "red" }}>
+                                                    *
+                                                </span>
+                                            </Form.Label>
+                                            <Form.Control type="text" onChange={(e) =>setdiscount(e.target.value) } />
+
+                                        </Form.Group>
+
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formGroupUsername"
+                                        >
+                                            <Form.Label>
+                                            detail
+                                                <span style={{ color: "red" }}>
+                                                    *
+                                                </span>
+                                            </Form.Label>
+                                            <Form.Control type="text" onChange={(e) =>setdetail(e.target.value) } />
+
+                                        </Form.Group>
+
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formGroupUsername"
+                                        >
+                                            <Form.Label>
+                                            vote
+                                                <span style={{ color: "red" }}>
+                                                    *
+                                                </span>
+                                            </Form.Label>
+                                            <Form.Control type="text" onChange={(e) =>setvote(e.target.value) } />
+
+                                        </Form.Group>
+
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formGroupUsername"
+                                        >
+                                            <Form.Label>
+                                            imagelink
+                                                <span style={{ color: "red" }}>
+                                                    *
+                                                </span>
+                                            </Form.Label>
+                                            <Form.Control type="text" onChange={(e) =>setimagelink(e.target.value) } />
+
+                                        </Form.Group>
+
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group
+                                            className="mb-3"
+                                            controlId="formGroupUsername"
+                                        >
+                                            <Form.Label>
+                                            status
+                                                <span style={{ color: "red" }}>
+                                                    *
+                                                </span>
+                                            </Form.Label>
+                                            <Form.Control type="text" onChange={(e) =>setstatus(e.target.value) } />
+
+                                        </Form.Group>
+
+                                    </Col>
+                                </Row>
+                              
+                               
                             </Form>
                         </Card.Body>
 
@@ -155,11 +257,8 @@ export default function AddService() {
                                 justifyContent: "flex-start",
                             }}
                         >
-                            <Button onClick={handleLogin} style={{ background: "green" }}>
-
-
+                            <Button onClick={AddnewService} style={{ background: "green" }}>
                                 Add
-
                             </Button>
                             <Link to="/">
                                 <Button
