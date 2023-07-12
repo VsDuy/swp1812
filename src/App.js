@@ -15,6 +15,8 @@ import Service from "./screens/Service";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+export const ApplicationContext = React.createContext([]);
+
 function App() {
   return (
     <React.Fragment>

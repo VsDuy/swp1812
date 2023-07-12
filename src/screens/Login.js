@@ -11,55 +11,76 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login } from "../service/userService";
+import axios from "axios";
+
 export default function Login() {
-  const [loginDetail, setLoginDetail] = useState({
-    email: "",
-    password: "",
-  });
-  // const nav = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
-  const handleChange = (event, field) => {
-    let actualValue = event.target.value;
-    setLoginDetail({
-      ...loginDetail,
-      [field]: actualValue,
-    });
-  };
+  const nav = useNavigate();
 
-  // const handleReset = (event, field) => {
-  //   setLoginDetail({
-  //     email: "",
-  //     password: "",
-  //   });
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleFormSubmit = (event) => {
-    event.preventDefault();
-    console.log(loginDetail);
-
-    //validation
-    if (loginDetail.email.trim() == "" || loginDetail.password.trim() == "") {
-      toast.error("Please enter your email and password!");
+    if (!email || !password) {
+      toast.error("Please enter your email and password");
       return;
     }
 
-    //submit data lên sv bằng token
-
-    login(loginDetail)
-      .then((jwtTokenData) => {
-        console.log("User login: ");
-        console.log(jwtTokenData);
-        toast.success("Login successful");
-      })
-      .catch((error) => {
-        console.log("error");
-        if (error.response.status == 400 || error.response.status == 404) {
-          toast.error(error.response.data.message);
-        } else {
-          toast.error("Something went wrong");
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/ccg1/login",
+        {
+          user: {
+            email,
+            password,
+          },
         }
-      });
+      );
+
+      const { data } = response;
+      console.log(data);
+      const user = data.user;
+      toast.success("login success");
+      localStorage.setItem("token", user.token);
+      if (!user) {
+        toast.error("Email and password are incorrect");
+      }
+    } catch (error) {
+      console.log(error.message);
+      setError(error.response.data.errors.message);
+    }
   };
+
+  // const handleFormSubmit = (event) => {
+  //   event.preventDefault();
+  //   console.log(loginDetail);
+
+  //   //validation
+  //   if (loginDetail.email.trim() == "" || loginDetail.password.trim() == "") {
+  //     toast.error("Please enter your email and password!");
+  //     return;
+  //   }
+
+  //   //submit data lên sv bằng token
+
+  //   login(loginDetail)
+  //     .then((jwtTokenData) => {
+  //       console.log("User login: ");
+  //       console.log(jwtTokenData);
+  //       toast.success("Login successful");
+  //       return "/";
+  //     })
+  //     .catch((error) => {
+  //       console.log("error");
+  //       if (error.response.status == 400 || error.response.status == 404) {
+  //         toast.error(error.response.data.message);
+  //       } else {
+  //         toast.error("Something went wrong");
+  //       }
+  //     });
+  // };
 
   return (
     <div>
@@ -73,14 +94,14 @@ export default function Login() {
                   <h2 className="fw-bold mb-2 text-uppercase ">Login</h2>
 
                   <div className="mb-3">
-                    <Form onSubmit={handleFormSubmit}>
+                    <Form onSubmit={handleSubmit}>
                       <Form.Group className="mb-3" controlId="email">
                         <Form.Label className="text-center">Email</Form.Label>
                         <Form.Control
-                          type="text"
-                          id="email"
-                          value={loginDetail.email}
-                          onChange={(e) => handleChange(e, "email")}
+                          type="email"
+                          placeholder="Enter email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
                         />
                       </Form.Group>
 
@@ -91,9 +112,9 @@ export default function Login() {
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                           type="password"
-                          id="password"
-                          value={loginDetail.password}
-                          onChange={(e) => handleChange(e, "password")}
+                          placeholder="Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
                         />
                       </Form.Group>
 
@@ -108,7 +129,7 @@ export default function Login() {
                         </p>
                       </Form.Group>
                       <div className="d-grid">
-                        <button class="button" onClick={handleChange}>
+                        <button class="button" variant="primary" type="submit">
                           Login
                           <div class="hoverEffect">
                             <div></div>

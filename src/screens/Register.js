@@ -1,60 +1,59 @@
 import { Card, Col, Container, Row } from "react-bootstrap";
 
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp } from "../service/userService";
 import { toast } from "react-toastify";
+import axios from "axios";
 
-export default function RegisterScreen() {
-  const [data, setData] = useState({
-    name: "",
-    gender: "",
-    password: "",
-    address: "",
-    email: "",
-    phone: "",
-    roleID: "",
-  });
+export default function SignUp() {
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [address, setAddress] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState("");
 
-  //const nav = useNavigate();
+  const navigate = useNavigate();
 
-  const handleChange = (event, property) => {
-    setData({ ...data, [property]: event.target.value });
+  const handleGenderChange = (event) => {
+    setGender(event.target.value);
   };
 
-  const [error, setError] = useState({
-    error: {},
-    isError: false,
-  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  const submitForm = (event) => {
-    event.preventDefault();
-    console.log(data);
+    if (password === confirmPassword) {
+      toast.success("Register success");
+      const data = {
+        user: {
+          name,
+          gender,
+          password,
+          address,
+          email,
+          phone,
+        },
+      };
+      axios
+        .post("http://localhost:8080/api/ccg1/register", data)
+        .then((response) => {
+          console.log(response);
 
-    //goi api
-    signUp(data)
-      .then((resp) => {
-        console.log(resp);
-        console.log("success log");
-        toast.success("Register success");
-        setData({
-          name: "",
-          gender: "",
-          password: "",
-          address: "",
-          email: "",
-          phone: "",
-          roleID: "",
+          if (response.status === 200) {
+            window.location.href = "/";
+          }
+        })
+        .catch((error) => {
+          console.error(error);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        console.log("error log");
-      });
+    } else {
+      setError("Passwords do not match.");
+    }
   };
 
   return (
@@ -64,19 +63,19 @@ export default function RegisterScreen() {
           <div className="border border-3 border-primary"></div>
           <Card className="shadow">
             <Card.Header style={{ background: "#eee" }}>
-              <Card.Title>User Registration</Card.Title>
+              <Card.Title>SignUp</Card.Title>
             </Card.Header>
 
             <Card.Body>
-              <Form onSubmit={submitForm}>
+              <Form onSubmit={handleSubmit}>
                 <Col>
                   <Form.Group className="mb-3" controlId="name">
                     <Form.Label>Fullname</Form.Label>
                     <Form.Control
                       type="text"
-                      id="name"
-                      value={data.name}
-                      onChange={(e) => handleChange(e, "name")}
+                      placeholder="Enter your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
                     />
                   </Form.Group>
                 </Col>
@@ -85,11 +84,16 @@ export default function RegisterScreen() {
                   <Form.Group className="mb-3" controlId="gender">
                     <Form.Label>Gender:</Form.Label>
                     <Form.Control
-                      type="text"
-                      id="gender"
-                      value={data.gender}
-                      onChange={(e) => handleChange(e, "gender")}
-                    />
+                      as="select"
+                      custom
+                      value={gender}
+                      onChange={handleGenderChange}
+                    >
+                      <option value="">Choose option</option>
+                      <option value={0}>Female</option>
+                      <option value={1}>Male</option>
+                      <option value={2}>Other</option>
+                    </Form.Control>
                   </Form.Group>
                 </Col>
 
@@ -98,10 +102,25 @@ export default function RegisterScreen() {
                     <Form.Label>Password</Form.Label>
                     <Form.Control
                       type="password"
-                      id="password"
-                      value={data.password}
-                      onChange={(e) => handleChange(e, "password")}
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
+                  </Form.Group>
+                </Col>
+
+                <Col>
+                  <Form.Group controlId="formBasicConfirmPassword">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="Confirm Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    {error && (
+                      <Form.Text className="text-danger">{error}</Form.Text>
+                    )}
                   </Form.Group>
                 </Col>
 
@@ -110,9 +129,9 @@ export default function RegisterScreen() {
                     <Form.Label>Address:</Form.Label>
                     <Form.Control
                       type="text"
-                      id="address"
-                      value={data.address}
-                      onChange={(e) => handleChange(e, "address")}
+                      placeholder="address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
                     />
                   </Form.Group>
                 </Col>
@@ -121,11 +140,14 @@ export default function RegisterScreen() {
                   <Form.Group className="mb-3" controlId="email">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
-                      type="text"
-                      id="email"
-                      value={data.email}
-                      onChange={(e) => handleChange(e, "email")}
+                      type="email"
+                      placeholder="Enter email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
+                    <Form.Text className="text-muted">
+                      We'll never share your email with anyone else.
+                    </Form.Text>
                   </Form.Group>
                 </Col>
 
@@ -134,24 +156,13 @@ export default function RegisterScreen() {
                     <Form.Label>Phone</Form.Label>
                     <Form.Control
                       type="text"
-                      id="phone"
-                      value={data.phone}
-                      onChange={(e) => handleChange(e, "phone")}
+                      placeholder="Enter your phone number"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
                     />
                   </Form.Group>
                 </Col>
 
-                <Col>
-                  <Form.Group className="mb-3" controlId="role">
-                    <Form.Label>Role</Form.Label>
-                    <Form.Control
-                      type="text"
-                      id="role"
-                      value={data.roleID}
-                      onChange={(e) => handleChange(e, "roleID")}
-                    />
-                  </Form.Group>
-                </Col>
                 <div>
                   <Card.Footer
                     style={{
@@ -159,7 +170,7 @@ export default function RegisterScreen() {
                       justifyContent: "flex-start",
                     }}
                   >
-                    <button class="button" onClick={handleChange}>
+                    <button class="button" variant="primary" type="submit">
                       Register
                       <div class="hoverEffect">
                         <div></div>
