@@ -15,12 +15,12 @@ export default function Menu() {
     ">
                     <ul class="navbar-nav">
                         <li class="nav-item" style={{marginTop:5 , marginRight:5}} >
-                            <a href="/">
-                                <House />
-                            </a>
+                        <Link class="nav-link" to={`/`}> <House /></Link>
+                             
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="service_list">Services</a>
+                        <Link class="nav-link" to={`/service_list`}>Services</Link>
+                            {/* <a class="nav-link" href="/service_list">Services</a> */}
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Blogs</a>
@@ -38,9 +38,17 @@ export default function Menu() {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-                                    <Dropdown.Item href="manager_service">Manager ServiceList</Dropdown.Item>
-                                    <Dropdown.Item href="manager_account">Account Manager</Dropdown.Item>
-                                    <Dropdown.Item href="#/action-3">FeedbackList</Dropdown.Item>
+                                    <Dropdown.Item>
+                                    <Link class="nav-link" to={`/manager_service`}> Manager ServiceList</Link> 
+                                        </Dropdown.Item>
+                                    <Dropdown.Item>
+                                    <Link class="nav-link" to={`/manager_account`}>  Account Manager</Link> 
+                                       
+                                        </Dropdown.Item>
+                                    <Dropdown.Item>
+                                    <Link class="nav-link" to={`/action-3`}> FeedbackList</Link> 
+                                        
+                                        </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         </li>

@@ -14,6 +14,7 @@ import EditList from "./screens/EditList";
 import Service from "./screens/Service";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ServiceDetail from "./screens/ServiceDetail";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -33,6 +34,7 @@ function App() {
           <Route path="/add_service" element={<AddService />} />
           <Route path="/edit" element={<EditList />} />
           <Route path="/service_list" element={<Service />} />
+          <Route path="/service_detail/:id" element={<ServiceDetail />} />
         </Routes>
       </BrowserRouter>
     </React.Fragment>
