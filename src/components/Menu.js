@@ -1,8 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
 import { House } from 'react-bootstrap-icons'
+import { useEffect } from "react";
 export default function Menu() {
+    const nav = useNavigate();
+
+    useEffect(() => {
+        // Kiểm tra token trong localStorage để xác định người dùng đã đăng nhập hay chưa
+        const token = localStorage.getItem("token");
+        if (token) {
+//             const jwt = require('jsonwebtoken');
+//             const secretKey = 'TUNG_TV';
+//             const decodedData = jwt.verify(token, secretKey);
+
+//             // Kết quả decodedData sẽ chứa các thông tin có trong JWT
+//   console.log(decodedData);
+        //    console.log(token)
+        }  
+      }, [nav]);
+
     return (
         <nav class="navbar navbar-expand-lg bg-body-tertiary" style={{ backgroundColor: "#e3f2fd", color: 'black', marginBottom: 20 }}>
             <div className="col-12 col-sm-2" class="container-fluid" >

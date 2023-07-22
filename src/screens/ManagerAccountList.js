@@ -14,7 +14,7 @@ export default function ManagerAccountList() {
 
   useEffect(() => {
 
-    fetch("http://localhost:8000/account").then(res => res.json())
+    fetch("http://localhost:8080/api/ccg1/users/listUser").then(res => res.json())
       .then(result => {
         setAccount(result);
       });

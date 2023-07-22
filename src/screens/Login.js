@@ -8,16 +8,17 @@ import {
   Toast,
 } from "react-bootstrap";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate ,useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login } from "../service/userService";
 import axios from "axios";
+
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-
   const nav = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -29,6 +30,7 @@ export default function Login() {
     }
 
     try {
+      
       const response = await axios.post(
         "http://localhost:8080/api/ccg1/login",
         {
@@ -39,17 +41,23 @@ export default function Login() {
         }
       );
 
+      // if()
       const { data } = response;
-      console.log(data);
+      // console.log(JSON.stringify(data));
       const user = data.user;
-      toast.success("login success");
-      localStorage.setItem("token", user.token);
+      
       if (!user) {
         toast.error("Email and password are incorrect");
+      }else{
+        toast.success("login success");
+        localStorage.setItem("token", user.token);
+        nav("/");
       }
     } catch (error) {
-      console.log(error.message);
-      setError(error.response.data.errors.message);
+      console.log(JSON.stringify(error));
+      toast.error("Email and password are incorrect");
+      // setError(error.response.data.errors.message);
+      // console.log(error)
     }
   };
 
