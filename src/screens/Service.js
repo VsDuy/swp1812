@@ -2,9 +2,33 @@ import { Container, Row, Col, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import UserTemplate from "../templates/UserTemplate";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { CartContext } from '../contexts/CartContext';
 
 export default function Service() {
+
+  const { addToCart } = useContext(CartContext);
+  const [serviceId, setServiceId] = useState([]);
+
+  const handleOrderService = (id) => {
+    // Lấy danh sách các serviceId từ Local Storage (nếu có)
+    const storedServiceId = JSON.parse(localStorage.getItem('ServiceId'));
+
+    if (!storedServiceId) {
+      // Nếu chưa tồn tại, tạo một mảng rỗng
+      const newServiceId = [id];
+      // Lưu mảng mới chứa serviceId vào Local Storage
+      localStorage.setItem('ServiceId', JSON.stringify(newServiceId));
+      // Cập nhật state bằng mảng mới
+      setServiceId(newServiceId);
+    } else {
+      // Nếu đã tồn tại, thêm id mới vào mảng và cập nhật lên Local Storage
+      const updatedServiceId = [...storedServiceId, id];
+      localStorage.setItem('ServiceId', JSON.stringify(updatedServiceId));
+      setServiceId(updatedServiceId);
+    }
+  };
+
   let [searchcategory, setSearchcategory] = useState(-1);
   const [service, setService] = useState([]);
   const [category, setCategory] = useState([]);
@@ -21,7 +45,7 @@ export default function Service() {
       .catch((error) => {
         console.error(error);
       });
-      
+
   });
 
   useEffect(() => {
@@ -45,7 +69,7 @@ export default function Service() {
       .catch((error) => {
         console.error(error);
       });
-      handlePage()
+    handlePage()
   };
   // var page = servicePage.length / pagesize;
   // if(servicePage.length % pagesize ==0){
@@ -102,16 +126,16 @@ export default function Service() {
                   <td>{p.price}</td>
                   <td>{p.re_name}</td>
                   <td>
-                    <img src={p.imagelink} onError={handleImageError}  alt="Service Image" />
+                    <img src={p.imagelink} onError={handleImageError} alt="Service Image" />
                   </td>
                   <td>
-                    
+
                     <Link to={`/service_detail/${p.service_id}`}>
-                    <Button variant="outline-success">Chi tiết dịch vụ</Button></Link>
+                      <Button variant="outline-success">Chi tiết dịch vụ</Button></Link>
                     {" "}
                   </td>
                   <td>
-                    <Button variant="outline-success" href="add_service">
+                    <Button onClick={() => handleOrderService(p.service_id)} variant="outline-success">
                       Đặt dịch vụ
                     </Button>{" "}
                   </td>
@@ -122,22 +146,22 @@ export default function Service() {
         </Col>
       </Row>
       <Row>
-  <Col xs={12} className="text-center">
-    {totalPage === 1 ? (
-     <span></span>
-    ) : (
-      numbers.map((number) => (
-        <React.Fragment key={number}>
-          <Button className={number+1  === currentpage ? "btn-dark" : ""}
-           onClick={() => setcurrentpage(number + 1)}>
-            {number + 1}
-          </Button>
-          {<span className="mx-0"></span>} {/* Thêm khoảng trống giữa các nút */}
-        </React.Fragment>
-      ))
-    )}
-  </Col>
-</Row>
+        <Col xs={12} className="text-center">
+          {totalPage === 1 ? (
+            <span></span>
+          ) : (
+            numbers.map((number) => (
+              <React.Fragment key={number}>
+                <Button className={number + 1 === currentpage ? "btn-dark" : ""}
+                  onClick={() => setcurrentpage(number + 1)}>
+                  {number + 1}
+                </Button>
+                {<span className="mx-0"></span>} {/* Thêm khoảng trống giữa các nút */}
+              </React.Fragment>
+            ))
+          )}
+        </Col>
+      </Row>
 
     </UserTemplate>
   );
