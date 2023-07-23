@@ -2,24 +2,47 @@ import { Container, Row, Col, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import UserTemplate from "../templates/UserTemplate";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
+import axios from "axios";
+
 
 export default function Service() {
   const [show, setShow] = useState(false);
   const [selectedServiceId, setSelectedServiceId] = useState({});
+  const [doctor, setDoctor] = useState([]);
+  const [nurse, setNurse] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const quantityRef = useRef(null);
+  const numOfPersonRef = useRef(null);
+  const doctorRef = useRef(null);
+  const nurseRef = useRef(null);
+  const slotRef = useRef(null);
+
   // Hàm xử lý sự kiện khi người dùng nhấn vào nút "Đặt dịch vụ"
-  const handleOrderService1 = (p) => {
+  const handleOrder = (p) => {
     setSelectedServiceId(p); // Lưu trữ service_id của phần tử được chọn
     handleShow(); // Mở modal sau khi đã cập nhật selectedServiceId
   };
+  const handleSaveChanges = (event) => {
+    event.preventDefault(); // Ngăn form tự động submit
 
-  const handleOrderService = (p) => {
+    const serviceId = selectedServiceId.service_id;
+    const title = selectedServiceId.title;
+    const quantity = parseInt(quantityRef.current.value, 10);
+    const numOfPerson = parseInt(numOfPersonRef.current.value, 10);
+    const selectedDoctor = parseInt(doctorRef.current.value, 10);
+    const selectedNurse = parseInt(nurseRef.current.value, 10);
+    const selectedSlot = parseInt(slotRef.current.value, 10);
+    const price = parseInt(selectedServiceId.price)
+    handleOrderService(serviceId, title, quantity, numOfPerson, selectedDoctor, selectedNurse, selectedSlot, price);
+    handleClose(); // Đóng modal sau khi đã lưu thay đổi
+  };
+  const handleOrderService = (serviceId, title, quantity, numOfPerson, selectedDoctor, selectedNurse, selectedSlot, price) => {
     // Lấy danh sách các serviceId từ Local Storage (nếu có)
     const storedService = JSON.parse(localStorage.getItem('Service'));
     var listCart = JSON.parse(localStorage.getItem('Service'));
@@ -29,14 +52,14 @@ export default function Service() {
     }
     var cartItem = {
       cartId: listCart.length + 1,
-      serviceId: p.service_id,
-      title: p.title,
-      quantity: 1,
-      numOfPerson: 1,
-      doctor: 1,
-      nurse: 1,
-      slot: 1,
-      price: 1000,
+      serviceId: serviceId,
+      title: title,
+      quantity: quantity,
+      numOfPerson: numOfPerson,
+      doctor: selectedDoctor,
+      nurse: selectedNurse,
+      slot: selectedSlot,
+      price: price,
     }
     listCart.push(cartItem);
     if (!storedService) {
@@ -46,7 +69,28 @@ export default function Service() {
       localStorage.setItem('Service', JSON.stringify(updatedService));
     }
   };
+  useEffect(() => {
+    fetchDataFromAPI();
+  }, []);
+  const fetchDataFromAPI = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/ccg1/users/role/2"
+      ); // Thay 'URL_API' bằng URL API thực tế
+      setDoctor(response.data);
+    } catch (error) {
+      console.error("Error fetching data role: ", error);
+    }
 
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/ccg1/users/role/3"
+      ); // Thay 'URL_API' bằng URL API thực tế
+      setNurse(response.data);
+    } catch (error) {
+      console.error("Error fetching data role: ", error);
+    }
+  }
   let [searchcategory, setSearchcategory] = useState(-1);
   const [service, setService] = useState([]);
   const [category, setCategory] = useState([]);
@@ -153,56 +197,92 @@ export default function Service() {
                     {" "}
                   </td>
                   <td>
-                    <Button onClick={() => handleOrderService1(p)} variant="outline-success" data-toggle="modal" data-target="#exampleModal">
+                    <Button onClick={() => handleOrder(p)} variant="outline-success" data-toggle="modal" data-target="#exampleModal">
                       Đặt dịch vụ
                     </Button>{" "}
-                    {/* <Button onClick={handleShow(p.service_id)} variant="outline-success" data-toggle="modal" data-target="#exampleModal">
-                      Đặt dịch vụ
-                    </Button>{" "} */}
+                    <Form name="formData" onSubmit={handleSaveChanges}>
+                      <Modal show={show} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>Modal heading</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          <label>Quantity</label>
+                          <Form.Control
+                            type="number"
+                            ref={quantityRef}
+                            name="quantity"
+                            placeholder="Quantity"
+                            className="mb-3"
+                            defaultValue={1}
+                            min={1}
+                            step={1}
+                          />
+                          <label>Number Of Person</label>
+                          <Form.Control
+                            type="number"
+                            ref={numOfPersonRef}
+                            name="numOfPerson"
+                            placeholder="Number Of Person"
+                            className="mb-3"
+                            defaultValue={1}
+                            min={1}
+                            step={1}
+                          />
+                          <label>Doctor</label>
+                          <Form.Control
+                            as="select"
+                            ref={doctorRef}
+                            name="selectedDoctor"
+                            className="form-control mb-3"
+                          >
+                            {doctor.map((doctor) => (
+                              <option key={doctor.userID} value={doctor.userID}>
+                                {doctor.name}
+                              </option>
+                            ))}
+                          </Form.Control>
+                          <label>Nurse</label>
+                          <Form.Control
+                            as="select"
+                            ref={nurseRef}
+                            name="selectedNurse"
+                            className="form-control mb-3"
+                          >
+                            {nurse.map((nurse) => (
+                              <option key={nurse.userID} value={nurse.userID}>
+                                {nurse.name}
+                              </option>
+                            ))}
+                          </Form.Control>
+                          <label>Slot</label>
+                          <Form.Control
+                            as="select"
+                            ref={slotRef}
+                            name="selectedSlot"
+                            className="form-control mb-3"
+                          >
+                            <option key={1} value={1}>
+                              1
+                            </option>
+                            <option key={2} value={2}>
+                              2
+                            </option>
+                            <option key={3} value={3}>
+                              3
+                            </option>
+                            <option key={4} value={4}>
+                              4
+                            </option>
+                          </Form.Control>
+                        </Modal.Body>
+                        <Modal.Footer>
+                          <Button variant="primary" type="submit" onClick={handleSaveChanges}>
+                            Add Service
+                          </Button>
+                        </Modal.Footer>
+                      </Modal>
+                    </Form>
 
-                    <Modal show={show} onHide={handleClose}>
-                      <Modal.Header closeButton>
-                        <Modal.Title>Modal heading</Modal.Title>
-                      </Modal.Header>
-                      <Modal.Body>
-                        {selectedServiceId.service_id}
-                        <Form.Control
-                          type="text"
-                          placeholder="Quantity"
-                        />
-                        <Form.Control
-                          type="text"
-                          placeholder="Number Of Person"
-                        />
-                        <Form.Select aria-label="Default select example">
-                          <option>Doctor</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                        </Form.Select>
-                        <Form.Select aria-label="Default select example">
-                          <option>Nurse</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                        </Form.Select>
-                        <Form.Select aria-label="Default select example">
-                          <option>Slot</option>
-                          <option value="1">1</option>
-                          <option value="2">2</option>
-                          <option value="3">3</option>
-                          <option value="4">4</option>
-                        </Form.Select>
-                      </Modal.Body>
-                      <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
-                        </Button>
-                        <Button variant="primary" onClick={handleClose}>
-                          Save Changes
-                        </Button>
-                      </Modal.Footer>
-                    </Modal>
                   </td>
                 </tr>
               ))}

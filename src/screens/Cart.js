@@ -1,33 +1,86 @@
 import UserTemplate from '../templates/UserTemplate';
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
+import axios from "axios";
 
 const Cart = () => {
     const [services, setServices] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [doctor, setDoctor] = useState([]);
+    const [nurse, setNurse] = useState([]);
+    const [quantityList, setQuantityList] = useState({}); // Sử dụng đối tượng để lưu trữ số lượng cho từng mục trong giỏ hàng
+    const [selectedSlots, setSelectedSlots] = useState({});
 
     useEffect(() => {
-        const storedServiceIds = JSON.parse(localStorage.getItem('Service'));
-        setServices(storedServiceIds);
-        setIsLoading(false);
+        fetchDataFromAPI();
     }, []);
+    const fetchDataFromAPI = async () => {
+        try {
+            const response = await axios.get(
+                "http://localhost:8080/api/ccg1/users/role/2"
+            ); // Thay 'URL_API' bằng URL API thực tế
+            setDoctor(response.data);
+        } catch (error) {
+            console.error("Error fetching data role: ", error);
+        }
 
+        try {
+            const response = await axios.get(
+                "http://localhost:8080/api/ccg1/users/role/3"
+            ); // Thay 'URL_API' bằng URL API thực tế
+            setNurse(response.data);
+        } catch (error) {
+            console.error("Error fetching data role: ", error);
+        }
+
+        try {
+            const storedServiceIds = JSON.parse(localStorage.getItem('Service'));
+            if (storedServiceIds && storedServiceIds.length > 0) {
+                setServices(storedServiceIds);
+            }
+            setIsLoading(false);
+        } catch (error) {
+            console.error("Error fetching data for services: ", error);
+        }
+    }
 
     const handleSlotSelection = (cartId, serviceId, selectedSlot) => {
-        console.log(cartId, serviceId, selectedSlot);
-        console.log(services)
-        // Hàm kiểm tra xem có các dịch vụ (services) có cùng serviceId và slot giống nhau hay không
-        const hasDuplicateServiceSlot = (services, serviceId, selectedSlot) => {
-            const count = services.filter(
-                (item) => item.serviceId == serviceId && item.slot == selectedSlot
-            ).length;
-            return count > 1;
-        };
-        console.log(hasDuplicateServiceSlot(services, serviceId, selectedSlot))
-        // if (hasDuplicateServiceSlot(services, serviceId, selectedSlot)) {
-        //     // Nếu có các dịch vụ trùng nhau, hiển thị cảnh báo lên màn hình
-        //     alert("Có các dịch vụ có cùng Service ID và Slot giống nhau!");
-        // }
+        // Kiểm tra xem có mục nào khác trong giỏ hàng có cùng serviceId và slot không
+        const isDuplicate = services.some(
+            (item) =>
+                item.cartId !== cartId &&
+                item.serviceId === serviceId &&
+                selectedSlots[item.cartId] === selectedSlot
+        );
+
+        // Nếu có mục trùng, in ra cảnh báo ngay lập tức
+        if (isDuplicate) {
+            alert("Cảnh báo: Slot đã được chọn bởi mục khác trong giỏ hàng.");
+            return; // Dừng xử lý tiếp theo khi có cảnh báo
+        }
+
+        // Lưu giá trị slot được chọn vào state selectedSlots
+        setSelectedSlots((prevSelectedSlots) => ({
+            ...prevSelectedSlots,
+            [cartId]: selectedSlot,
+        }));
+
+    };
+
+    const checkDuplicateSlot = (cart, selectedCartId, selectedSlot) => {
+        const duplicateItem = cart.find(
+            (item) =>
+                item.cartId !== selectedCartId && // Tránh so sánh với chính mục đang xét
+                item.serviceId === selectedCartId.serviceId &&
+                item.selectedSlot === selectedSlot
+        );
+        return duplicateItem !== undefined;
+    };
+
+    const handleQuantityChange = (cartId, newQuantity) => {
+        // Tạo một bản sao của đối tượng quantityList để thay đổi số lượng cho mục cụ thể
+        const updatedQuantityList = { ...quantityList, [cartId]: newQuantity };
+        setQuantityList(updatedQuantityList);
     };
 
     return (
@@ -39,6 +92,8 @@ const Cart = () => {
                             <h3 className='text-primary'>Danh sách Dịch vụ</h3>
                             {isLoading ? (
                                 <p>Đang tải...</p>
+                            ) : services.length === 0 ? (
+                                <p>Giỏ hàng của bạn trống.</p>
                             ) : (
                                 <>
                                     <Table hover>
@@ -60,10 +115,12 @@ const Cart = () => {
                                                     <td>{item.title}</td>
                                                     <td>
                                                         <Form.Control
+                                                            id={`quantity${item.cartId}`}
                                                             type="number"
                                                             min={1}
                                                             step={1}
-                                                            defaultValue={1}
+                                                            value={quantityList[item.cartId] || 1}
+                                                            onChange={(e) => handleQuantityChange(item.cartId, parseInt(e.target.value))}
                                                         />
                                                     </td>
                                                     <td>
@@ -77,20 +134,24 @@ const Cart = () => {
                                                     <td>
                                                         <div className="input-group mb-3">
                                                             <select className="custom-select" id="doctor">
-                                                                <option selected>{item.doctor}</option>
-                                                                <option value="1">Mr. B</option>
-                                                                <option value="2">Mr. C</option>
-                                                                <option value="3">Mr. D</option>
+                                                                {/* Hiển thị tên bác sĩ tương ứng với item.doctor */}
+                                                                {doctor.map((doctor) => (
+                                                                    <option key={doctor.userID} value={doctor.userID} selected={doctor.userID === item.doctor}>
+                                                                        {doctor.name}
+                                                                    </option>
+                                                                ))}
                                                             </select>
                                                         </div>
                                                     </td>
                                                     <td>
                                                         <div className="input-group mb-3">
                                                             <select className="custom-select" id="nurse">
-                                                                <option selected>{item.nurse}</option>
-                                                                <option value="1">Miss. B</option>
-                                                                <option value="2">Miss. C</option>
-                                                                <option value="3">Miss. D</option>
+                                                                {/* Hiển thị tên y tá tương ứng với item.nurse */}
+                                                                {nurse.map((nurse) => (
+                                                                    <option key={nurse.userID} value={nurse.userID} selected={nurse.userID === item.nurse}>
+                                                                        {nurse.name}
+                                                                    </option>
+                                                                ))}
                                                             </select>
                                                         </div>
                                                     </td>
@@ -98,7 +159,7 @@ const Cart = () => {
                                                         <div className="input-group mb-3">
                                                             <select
                                                                 className="custom-select"
-                                                                id={`slot-${item.id}`}
+                                                                id={`slot-${item.cartId}`}
                                                                 onChange={(e) =>
                                                                     handleSlotSelection(
                                                                         item.cartId,
@@ -111,12 +172,11 @@ const Cart = () => {
                                                                 <option value={2}>2</option>
                                                                 <option value={3}>3</option>
                                                                 <option value={4}>4</option>
-
                                                             </select>
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <span className='text-success'>$1000</span>
+                                                        <span className='text-success'>${item.price * (quantityList[item.cartId] || 1)}</span>
                                                     </td>
                                                     <td>
                                                         <a className='btn btn-outline-danger'>Remove</a>
