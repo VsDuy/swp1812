@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import UserTemplate from "../templates/UserTemplate";
 
 export default function AddService() {
     let [title, settitle] = useState("");
@@ -52,8 +53,8 @@ export default function AddService() {
 
 
     return (
-
-        <Container class="container">
+        <UserTemplate>
+ <Container class="container">
             <Row className="vh-100 d-flex justify-content-center align-items-center">
                 <Col md={8} lg={6} xs={12}>
                     <div className="border border-3 border-primary"></div>
@@ -274,6 +275,8 @@ export default function AddService() {
             </Row>
         </Container>
 
+        </UserTemplate>
+       
 
 
     );

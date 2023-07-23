@@ -17,6 +17,9 @@ import Cart from "./screens/Cart";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ServiceDetail from "./screens/ServiceDetail";
+import EditAccount from "./screens/EditAccount";
+import AddAccount from "./screens/AddUser";
+import ProfileUser from "./screens/ProfileUser";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -38,6 +41,9 @@ function App() {
             <Route path="/edit" element={<EditList />} />
             <Route path="/service_list" element={<Service />} />
             <Route path="/service_detail/:id" element={<ServiceDetail />} />
+            <Route path="/editUser/:id" element={<EditAccount />} />ProfileUser
+            <Route path="/profileUser/:id" element={<ProfileUser />} />
+            <Route path="/addUser/" element={<AddAccount />} />
             <Route path="/cart" element={<Cart />} />
           </Routes>
         </CartProvider>

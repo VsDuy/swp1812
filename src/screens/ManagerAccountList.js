@@ -126,9 +126,12 @@ export default function ManagerAccountList() {
   const selectedRole = roles.find((role) => role.roleID == idRole);
   return (
     <UserTemplate>
+      <Link to={`/addUser/`}>
       <Button variant="outline-success">
         Add new User
-      </Button>{" "}
+      </Button> 
+      </Link>
+      
       <Row>
         <Col xs={4}>
           <Form.Control type="text" placeholder="Search" disabled readOnly />
@@ -200,9 +203,9 @@ export default function ManagerAccountList() {
                       <td>{p.roleName}</td>
                       <td>{p.status == 1 ? "Active" : "Block"}</td>
                       <td>
-                        <a >
+                        <Link to={`/editUser/${p.userID}`}>
                           <PencilSquare />
-                        </a>
+                          </Link>
                       </td>
                       <td>
                         <a
