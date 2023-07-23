@@ -3,6 +3,7 @@ import { Nav } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
 import { House } from "react-bootstrap-icons";
 import { useEffect } from "react";
+// import jwt from "jsonwebtoken";
 export default function Menu() {
   const nav = useNavigate();
 
@@ -10,6 +11,23 @@ export default function Menu() {
     // Kiểm tra token trong localStorage để xác định người dùng đã đăng nhập hay chưa
     const token = localStorage.getItem("token");
     if (token) {
+    //   const decodeJWT = (token) => {
+    //     try {
+    //       // Giải mã JWT với khóa bí mật (secret) đã sử dụng để ký
+    //       const decodedToken = jwt.verify(token, "TUNG_TV");
+
+    //       // Trả về payload (thông tin người dùng) đã giải mã từ token
+    //       return decodedToken;
+    //     } catch (error) {
+    //       // Nếu xảy ra lỗi trong quá trình giải mã (token không hợp lệ, hết hạn,...)
+    //       // bạn có thể xử lý lỗi ở đây nếu cần thiết
+    //       console.error("Lỗi giải mã JWT:", error);
+    //       return null;
+    //     }
+    //   };
+    //   const decodedPayload = decodeJWT(token);
+    //   console.log(decodedPayload);
+
       //             const jwt = require('jsonwebtoken');
       //             const secretKey = 'TUNG_TV';
       //             const decodedData = jwt.verify(token, secretKey);
@@ -119,11 +137,10 @@ export default function Menu() {
               </Nav.Link>
             </li>
             <li className="nav-item">
-            <Link  className="btn btn-#fff ms-lg-2" to={`/profileUser/2`}>
+              <Link className="btn btn-#fff ms-lg-2" to={`/profileUser/2`}>
                 <div>
                   <img
                     style={{
-                     
                       height: "40px",
                       width: "40px",
                       borderRadius: "50%",
