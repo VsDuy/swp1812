@@ -1,91 +1,139 @@
-import UserTemplate from '../templates/UserTemplate'
-import React, { useContext, useEffect, useState } from 'react'
-import { CartContext } from '../contexts/CartContext';
-import { Container, Row, Col, Table } from "react-bootstrap";
-
+import UserTemplate from '../templates/UserTemplate';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 
 const Cart = () => {
     const [services, setServices] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        // Lấy danh sách serviceId từ Local Storage
-        const storedServiceIds = JSON.parse(localStorage.getItem('ServiceId'));
-
-        if (storedServiceIds && storedServiceIds.length > 0) {
-            // Tạo mảng các Promise fetch API dựa trên danh sách serviceId
-            const fetchPromises = storedServiceIds.map((id) => {
-                const url = "http://localhost:8080/api/Service/Service/GetServiceById/" + id;
-                return fetch(url).then((response) => response.json());
-            });
-
-            // Gửi tất cả các yêu cầu API cùng một lúc và chờ cho đến khi tất cả các yêu cầu hoàn thành
-            Promise.all(fetchPromises)
-                .then((dataList) => {
-                    // Cập nhật mảng services với dữ liệu từ API
-                    setServices(dataList);
-                })
-                .catch((error) => console.error(error));
-        }
+        const storedServiceIds = JSON.parse(localStorage.getItem('Service'));
+        setServices(storedServiceIds);
+        setIsLoading(false);
     }, []);
-    console.log(services)
+
+
+    const handleSlotSelection = (cartId, serviceId, selectedSlot) => {
+        console.log(cartId, serviceId, selectedSlot);
+        console.log(services)
+        // Hàm kiểm tra xem có các dịch vụ (services) có cùng serviceId và slot giống nhau hay không
+        const hasDuplicateServiceSlot = (services, serviceId, selectedSlot) => {
+            const count = services.filter(
+                (item) => item.serviceId == serviceId && item.slot == selectedSlot
+            ).length;
+            return count > 1;
+        };
+        console.log(hasDuplicateServiceSlot(services, serviceId, selectedSlot))
+        // if (hasDuplicateServiceSlot(services, serviceId, selectedSlot)) {
+        //     // Nếu có các dịch vụ trùng nhau, hiển thị cảnh báo lên màn hình
+        //     alert("Có các dịch vụ có cùng Service ID và Slot giống nhau!");
+        // }
+    };
+
     return (
         <UserTemplate>
-            <Table>
-                <thead>
-                    <tr>
-                        <td>Service Id</td>
-                        <td>Quantity</td>
-                        <td>Num Of Person</td>
-                        <td>Doctor</td>
-                        <td>Nurse</td>
-                        <td>Slot</td>
-                        <td>Price</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {services.map((item) => (
-                        <tr key={item.id}>
-                            <td>{item.id}</td>
-                            <td>
-                                <input type='number' value={1} step={1} />
-                            </td>
-                            <td>
-                                <input type='number' value={1} step={1} />
-                            </td>
-                            <td>
-                                <select>
-                                    <option>Mr a</option>
-                                    <option>Mr V</option>
-                                    <option>Mr D</option>
-                                    <option>Mr R</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select>
-                                    <option>Ms a</option>
-                                    <option>Ms b</option>
-                                    <option>Ms c</option>
-                                    <option>Ms d</option>
-                                </select>
-                            </td>
-                            <td>
-                                <select>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                </select>
-                            </td>
-                            <td>
-                                1000
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
+            <Container>
+                <div className='bg-white shadow p-5 rounded-2'>
+                    <Row className="">
+                        <Col>
+                            <h3 className='text-primary'>Danh sách Dịch vụ</h3>
+                            {isLoading ? (
+                                <p>Đang tải...</p>
+                            ) : (
+                                <>
+                                    <Table hover>
+                                        <thead>
+                                            <tr>
+                                                <th>Service Name</th>
+                                                <th>Quantity</th>
+                                                <th>Number of Person</th>
+                                                <th>Doctor</th>
+                                                <th>Nurse</th>
+                                                <th>Slot</th>
+                                                <th>Price</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {services.map((item) => (
+                                                <tr key={item.cartId}>
+                                                    <td>{item.title}</td>
+                                                    <td>
+                                                        <Form.Control
+                                                            type="number"
+                                                            min={1}
+                                                            step={1}
+                                                            defaultValue={1}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <Form.Control
+                                                            type="number"
+                                                            min={1}
+                                                            step={1}
+                                                            defaultValue={1}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <div className="input-group mb-3">
+                                                            <select className="custom-select" id="doctor">
+                                                                <option selected>{item.doctor}</option>
+                                                                <option value="1">Mr. B</option>
+                                                                <option value="2">Mr. C</option>
+                                                                <option value="3">Mr. D</option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="input-group mb-3">
+                                                            <select className="custom-select" id="nurse">
+                                                                <option selected>{item.nurse}</option>
+                                                                <option value="1">Miss. B</option>
+                                                                <option value="2">Miss. C</option>
+                                                                <option value="3">Miss. D</option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="input-group mb-3">
+                                                            <select
+                                                                className="custom-select"
+                                                                id={`slot-${item.id}`}
+                                                                onChange={(e) =>
+                                                                    handleSlotSelection(
+                                                                        item.cartId,
+                                                                        item.serviceId,
+                                                                        e.target.value
+                                                                    )
+                                                                }
+                                                            >
+                                                                <option value={1}>1</option>
+                                                                <option value={2}>2</option>
+                                                                <option value={3}>3</option>
+                                                                <option value={4}>4</option>
 
-            </Table>
-
+                                                            </select>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span className='text-success'>$1000</span>
+                                                    </td>
+                                                    <td>
+                                                        <a className='btn btn-outline-danger'>Remove</a>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </Table>
+                                </>
+                            )}
+                        </Col>
+                    </Row>
+                    <button className='btn btn-primary float-right'>Thanh toán</button>
+                </div>
+            </Container>
         </UserTemplate>
     );
 };
 
-export default Cart
+export default Cart;

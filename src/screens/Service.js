@@ -3,29 +3,47 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import UserTemplate from "../templates/UserTemplate";
 import React, { useState, useEffect, useContext } from "react";
-import { CartContext } from '../contexts/CartContext';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 
 export default function Service() {
+  const [show, setShow] = useState(false);
+  const [selectedServiceId, setSelectedServiceId] = useState({});
 
-  const { addToCart } = useContext(CartContext);
-  const [serviceId, setServiceId] = useState([]);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-  const handleOrderService = (id) => {
+  // Hàm xử lý sự kiện khi người dùng nhấn vào nút "Đặt dịch vụ"
+  const handleOrderService1 = (p) => {
+    setSelectedServiceId(p); // Lưu trữ service_id của phần tử được chọn
+    handleShow(); // Mở modal sau khi đã cập nhật selectedServiceId
+  };
+
+  const handleOrderService = (p) => {
     // Lấy danh sách các serviceId từ Local Storage (nếu có)
-    const storedServiceId = JSON.parse(localStorage.getItem('ServiceId'));
+    const storedService = JSON.parse(localStorage.getItem('Service'));
+    var listCart = JSON.parse(localStorage.getItem('Service'));
 
-    if (!storedServiceId) {
-      // Nếu chưa tồn tại, tạo một mảng rỗng
-      const newServiceId = [id];
-      // Lưu mảng mới chứa serviceId vào Local Storage
-      localStorage.setItem('ServiceId', JSON.stringify(newServiceId));
-      // Cập nhật state bằng mảng mới
-      setServiceId(newServiceId);
+    if (listCart === null) {
+      listCart = []
+    }
+    var cartItem = {
+      cartId: listCart.length + 1,
+      serviceId: p.service_id,
+      title: p.title,
+      quantity: 1,
+      numOfPerson: 1,
+      doctor: 1,
+      nurse: 1,
+      slot: 1,
+      price: 1000,
+    }
+    listCart.push(cartItem);
+    if (!storedService) {
+      localStorage.setItem('Service', JSON.stringify(listCart));
     } else {
-      // Nếu đã tồn tại, thêm id mới vào mảng và cập nhật lên Local Storage
-      const updatedServiceId = [...storedServiceId, id];
-      localStorage.setItem('ServiceId', JSON.stringify(updatedServiceId));
-      setServiceId(updatedServiceId);
+      const updatedService = [...storedService, cartItem];
+      localStorage.setItem('Service', JSON.stringify(updatedService));
     }
   };
 
@@ -135,9 +153,56 @@ export default function Service() {
                     {" "}
                   </td>
                   <td>
-                    <Button onClick={() => handleOrderService(p.service_id)} variant="outline-success">
+                    <Button onClick={() => handleOrderService1(p)} variant="outline-success" data-toggle="modal" data-target="#exampleModal">
                       Đặt dịch vụ
                     </Button>{" "}
+                    {/* <Button onClick={handleShow(p.service_id)} variant="outline-success" data-toggle="modal" data-target="#exampleModal">
+                      Đặt dịch vụ
+                    </Button>{" "} */}
+
+                    <Modal show={show} onHide={handleClose}>
+                      <Modal.Header closeButton>
+                        <Modal.Title>Modal heading</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        {selectedServiceId.service_id}
+                        <Form.Control
+                          type="text"
+                          placeholder="Quantity"
+                        />
+                        <Form.Control
+                          type="text"
+                          placeholder="Number Of Person"
+                        />
+                        <Form.Select aria-label="Default select example">
+                          <option>Doctor</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                        </Form.Select>
+                        <Form.Select aria-label="Default select example">
+                          <option>Nurse</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                        </Form.Select>
+                        <Form.Select aria-label="Default select example">
+                          <option>Slot</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                        </Form.Select>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>
+                          Close
+                        </Button>
+                        <Button variant="primary" onClick={handleClose}>
+                          Save Changes
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
                   </td>
                 </tr>
               ))}
