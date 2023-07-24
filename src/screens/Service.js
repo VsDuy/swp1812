@@ -6,6 +6,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function Service() {
   const [show, setShow] = useState(false);
@@ -21,6 +22,7 @@ export default function Service() {
   const doctorRef = useRef(null);
   const nurseRef = useRef(null);
   const slotRef = useRef(null);
+  const dateRef = useRef(null);
 
   // Hàm xử lý sự kiện khi người dùng nhấn vào nút "Đặt dịch vụ"
   const handleOrder = (p) => {
@@ -31,6 +33,7 @@ export default function Service() {
     event.preventDefault(); // Ngăn form tự động submit
 
     const serviceId = selectedServiceId.service_id;
+    const priceService = selectedServiceId.price;
     const title = selectedServiceId.title;
     const quantity = parseInt(quantityRef.current.value, 10);
     const numOfPerson = parseInt(numOfPersonRef.current.value, 10);
@@ -38,6 +41,8 @@ export default function Service() {
     const selectedNurse = parseInt(nurseRef.current.value, 10);
     const selectedSlot = parseInt(slotRef.current.value, 10);
     const price = parseInt(selectedServiceId.price);
+    const dateBook = dateRef.current.value;
+
     handleOrderService(
       serviceId,
       title,
@@ -46,11 +51,15 @@ export default function Service() {
       selectedDoctor,
       selectedNurse,
       selectedSlot,
-      price
+      price,
+      dateBook,
+      priceService
     );
-    handleClose(); // Đóng modal sau khi đã lưu thay đổi
   };
-  const handleOrderService = (
+
+  var checkCart;
+
+  const handleOrderService = async (
     serviceId,
     title,
     quantity,
@@ -58,17 +67,30 @@ export default function Service() {
     selectedDoctor,
     selectedNurse,
     selectedSlot,
-    price
+    price,
+    dateBook,
+    priceService
   ) => {
     // Lấy danh sách các serviceId từ Local Storage (nếu có)
     const storedService = JSON.parse(localStorage.getItem("Service"));
     var listCart = JSON.parse(localStorage.getItem("Service"));
-
+    var cartId = 1;
+    if (listCart != null) {
+      cartId =
+        listCart.reduce(
+          (maxId, item) => (item.cartId > maxId ? item.cartId : maxId),
+          0
+        ) + 1;
+    }
     if (listCart === null) {
       listCart = [];
     }
+    if (dateBook < getCurrentDate()) {
+      toast.error("Cannot set past date");
+      return;
+    }
     var cartItem = {
-      cartId: listCart.length + 1,
+      cartId: cartId,
       serviceId: serviceId,
       title: title,
       quantity: quantity,
@@ -77,15 +99,52 @@ export default function Service() {
       nurse: selectedNurse,
       slot: selectedSlot,
       price: price,
+      priceService: priceService,
+      userId: 1,
+      beginTime: dateBook,
     };
-    listCart.push(cartItem);
-    if (!storedService) {
-      localStorage.setItem("Service", JSON.stringify(listCart));
+
+    try {
+      const response =  await axios.put(
+        "http://localhost:8080/api/ccg1/reservation/checkCart",
+        cartItem
+      ); // Thay 'URL_API' bằng URL API thực tế
+      console.log(response.data);
+      if (response.data === 1) {
+        toast.error("Looks like the doctor or nurse already has this schedule");
+        return;
+      } else {
+      }
+    } catch (error) {
+      return;
+    }
+    const existingItem = listCart.find(
+      (item) =>
+        (item.cartId !== cartItem.cartId &&
+        item.beginTime === cartItem.beginTime &&
+        item.serviceId === serviceId && 
+        item.slot === selectedSlot) 
+        ||(item.beginTime === cartItem.beginTime 
+          &&  item.slot === selectedSlot
+          &&  (item.doctor === selectedDoctor || item.nurse === selectedNurse))
+    );
+    if (existingItem) {
+      toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
     } else {
-      const updatedService = [...storedService, cartItem];
-      localStorage.setItem("Service", JSON.stringify(updatedService));
+      listCart.push(cartItem);
+      if (!storedService) {
+        localStorage.setItem("Service", JSON.stringify(listCart));
+      } else {
+        const updatedService = [...storedService, cartItem];
+        localStorage.setItem("Service", JSON.stringify(updatedService));
+      }
+      handleClose(); // Đóng modal sau khi đã lưu thay đổi
+      toast.success("Appointment successful");
     }
   };
+
+  const fetchDataFromAPICheck = async (cartItem) => {};
+
   useEffect(() => {
     fetchDataFromAPI();
   }, []);
@@ -171,6 +230,18 @@ export default function Service() {
     e.target.src =
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBONcJOzAAsu-WtDfk0Sr3QNGcTSnonIpRBQ&usqp=CAU"; // Thay thế bằng đường dẫn của ảnh mặc định (abc.jpg)
   };
+
+  // Hàm lấy ngày/tháng/năm hiện tại dưới dạng chuỗi dd/mm/yyyy
+  const getCurrentDate = () => {
+    const today = new Date();
+    today.setDate(today.getDate() + 1); // Tăng giá trị ngày lên 1 để lấy ngày tiếp theo
+    const day = today.getDate().toString().padStart(2, "0");
+    const month = (today.getMonth() + 1).toString().padStart(2, "0");
+    const year = today.getFullYear();
+
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <UserTemplate>
       <div className="bg-white p-5 shadow">
@@ -216,22 +287,37 @@ export default function Service() {
                     <td>{p.price}</td>
                     <td>{p.re_name}</td>
                     <td>
-                      <img src={p.imagelink} onError={handleImageError} alt="Service Image" />
+                      <img
+                        src={p.imagelink}
+                        onError={handleImageError}
+                        alt="Service Image"
+                      />
                     </td>
                     <td>
-
                       <Link to={`/service_detail/${p.service_id}`}>
-                        <Button variant="outline-warning">Chi tiết dịch vụ</Button></Link>
-                      {" "}
+                        <Button variant="outline-warning">
+                          Chi tiết dịch vụ
+                        </Button>
+                      </Link>{" "}
                     </td>
                     <td>
-                      <Button onClick={() => handleOrder(p)} variant="outline-success" data-toggle="modal" data-target="#exampleModal">
+                      <Button
+                        onClick={() => handleOrder(p)}
+                        variant="outline-success"
+                        data-toggle="modal"
+                        data-target="#exampleModal"
+                      >
                         Đặt dịch vụ
                       </Button>{" "}
                       <Form name="formData" onSubmit={handleSaveChanges}>
                         <Modal show={show} onHide={handleClose}>
                           <Modal.Header closeButton>
-                            <Modal.Title>Modal heading</Modal.Title>
+                            <Modal.Title>Book Service</Modal.Title>
+
+                            {/* Thêm biểu tượng "x" vào đây */}
+                            <Button variant="secondary" onClick={handleClose}>
+                              <span aria-hidden="true">&times;</span>
+                            </Button>
                           </Modal.Header>
                           <Modal.Body>
                             <label>Quantity</label>
@@ -244,6 +330,16 @@ export default function Service() {
                               defaultValue={1}
                               min={1}
                               step={1}
+                            />
+                            <label>Date </label>
+                            <Form.Control
+                              type="date"
+                              ref={dateRef}
+                              name="dateBook"
+                              placeholder="Quantity"
+                              className="mb-3"
+                              defaultValue={getCurrentDate()} // Đặt giá trị mặc định là ngày/tháng/năm hiện tại
+                              min={getCurrentDate()} // Không cho phép chọn ngày quá khứ
                             />
                             <label>Number Of Person</label>
                             <Form.Control
@@ -264,7 +360,10 @@ export default function Service() {
                               className="form-control mb-3"
                             >
                               {doctor.map((doctor) => (
-                                <option key={doctor.userID} value={doctor.userID}>
+                                <option
+                                  key={doctor.userID}
+                                  value={doctor.userID}
+                                >
                                   {doctor.name}
                                 </option>
                               ))}
@@ -304,13 +403,16 @@ export default function Service() {
                             </Form.Control>
                           </Modal.Body>
                           <Modal.Footer>
-                            <Button variant="primary" type="submit" onClick={handleSaveChanges}>
+                            <Button
+                              variant="primary"
+                              type="submit"
+                              onClick={handleSaveChanges}
+                            >
                               Add Service
                             </Button>
                           </Modal.Footer>
                         </Modal>
                       </Form>
-
                     </td>
                   </tr>
                 ))}
@@ -325,19 +427,20 @@ export default function Service() {
             ) : (
               numbers.map((number) => (
                 <React.Fragment key={number}>
-                  <Button className={number + 1 === currentpage ? "btn-dark" : ""}
-                    onClick={() => setcurrentpage(number + 1)}>
+                  <Button
+                    className={number + 1 === currentpage ? "btn-dark" : ""}
+                    onClick={() => setcurrentpage(number + 1)}
+                  >
                     {number + 1}
                   </Button>
-                  {<span className="mx-0"></span>} {/* Thêm khoảng trống giữa các nút */}
+                  {<span className="mx-0"></span>}{" "}
+                  {/* Thêm khoảng trống giữa các nút */}
                 </React.Fragment>
               ))
             )}
           </Col>
         </Row>
       </div>
-
-
     </UserTemplate>
   );
 }
