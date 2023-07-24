@@ -69,7 +69,7 @@ export default function Menu() {
                             </Link>
                         </li>
                         <li class="nav-item">
-                            <Link class="nav-link" to={`/service_list`}>
+                            <Link class="nav-link decoration-none" to={`/service_list`}>
                                 Services
                             </Link>
                             {/* <a class="nav-link" href="/service_list">Services</a> */}

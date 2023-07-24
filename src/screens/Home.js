@@ -117,18 +117,18 @@ export default function Home() {
         >
           Dich Vu Tieu Bieu
         </h3>
-        <div className="row content" id="home">
+        <div className="row content d-flex jusify-content-around border-none" id="home">
           {service.map((s) => (
-            <div className="col-12 col-sm-4 product">
+            <div className="product bg-white w-25 me-3 mb-3 d-flex flex-column justify-contnt-center align-items-center border-none">
               <Link to={`/service_detail/${s.service_id}`}>
-              <img src={s.imagelink} width="200"
-               onError={handleImageError} 
-              height="150"></img>
-              <h5 style={{ fontSize: 18, color: "blue" }}>{s.title}</h5>
-              <p style={{ fontSize: 12 }}>{s.bi}</p>
+                <img src={s.imagelink} width="100%"
+                  onError={handleImageError}
+                  height="150"></img>
+                <h5 className="text-center" style={{ fontSize: 18, color: "blue" }}>{s.title}</h5>
+                <p style={{ fontSize: 12 }}>{s.bi}</p>
               </Link>
               <Button variant="outline-success" href="#">
-                Add new
+                Add
               </Button>{" "}
               <br></br>
             </div>

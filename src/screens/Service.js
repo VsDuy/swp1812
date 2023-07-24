@@ -173,172 +173,171 @@ export default function Service() {
   };
   return (
     <UserTemplate>
-      <Row>
-        <Col xs={12}>
-          <Button
-            variant="outline-primary"
-            onClick={() => setSearchcategory(-1)}
-          >
-            <span class="button-content">All</span>
-          </Button>
-          {category.map((s) => (
+      <div className="bg-white p-5 shadow">
+        <Row className="mb-3">
+          <Col xs={12}>
             <Button
               variant="outline-primary"
-              onClick={() => setSearchcategory(s.categoryId)}
-              key={s.categoryId}
+              onClick={() => setSearchcategory(-1)}
             >
-              <span class="button-content">{s.categoryName}</span>
+              <span class="button-content">All</span>
             </Button>
-          ))}
-        </Col>
-      </Row>
-
-      <Row>
-        <Col xs={12}>
-          <Table>
-            <tbody>
-              {service.map((p) => (
-                <tr key={p.service_id}>
-                  <td>{p.title}</td>
-                  <td>{p.bi}</td>
-                  <td>{p.price}</td>
-                  <td>{p.re_name}</td>
-                  <td>
-                    <img
-                      src={p.imagelink}
-                      onError={handleImageError}
-                      alt="Service Image"
-                    />
-                  </td>
-                  <td>
-                    <Link to={`/service_detail/${p.service_id}`}>
-                      <Button variant="outline-success">
-                        Chi tiết dịch vụ
-                      </Button>
-                    </Link>{" "}
-                  </td>
-                  <td>
-                    <Button
-                      onClick={() => handleOrder(p)}
-                      variant="outline-success"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                    >
-                      Đặt dịch vụ
-                    </Button>{" "}
-                    <Form name="formData" onSubmit={handleSaveChanges}>
-                      <Modal show={show} onHide={handleClose}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>Add Cart</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          <label>Quantity</label>
-                          <Form.Control
-                            type="number"
-                            ref={quantityRef}
-                            name="quantity"
-                            placeholder="Quantity"
-                            className="mb-3"
-                            defaultValue={1}
-                            min={1}
-                            step={1}
-                          />
-                          <label>Number Of Person</label>
-                          <Form.Control
-                            type="number"
-                            ref={numOfPersonRef}
-                            name="numOfPerson"
-                            placeholder="Number Of Person"
-                            className="mb-3"
-                            defaultValue={1}
-                            min={1}
-                            step={1}
-                          />
-                          <label>Doctor</label>
-                          <Form.Control
-                            as="select"
-                            ref={doctorRef}
-                            name="selectedDoctor"
-                            className="form-control mb-3"
-                          >
-                            {doctor.map((doctor) => (
-                              <option key={doctor.userID} value={doctor.userID}>
-                                {doctor.name}
-                              </option>
-                            ))}
-                          </Form.Control>
-                          <label>Nurse</label>
-                          <Form.Control
-                            as="select"
-                            ref={nurseRef}
-                            name="selectedNurse"
-                            className="form-control mb-3"
-                          >
-                            {nurse.map((nurse) => (
-                              <option key={nurse.userID} value={nurse.userID}>
-                                {nurse.name}
-                              </option>
-                            ))}
-                          </Form.Control>
-                          <label>Slot</label>
-                          <Form.Control
-                            as="select"
-                            ref={slotRef}
-                            name="selectedSlot"
-                            className="form-control mb-3"
-                          >
-                            <option key={1} value={1}>
-                              1
-                            </option>
-                            <option key={2} value={2}>
-                              2
-                            </option>
-                            <option key={3} value={3}>
-                              3
-                            </option>
-                            <option key={4} value={4}>
-                              4
-                            </option>
-                          </Form.Control>
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button
-                            variant="primary"
-                            type="submit"
-                            onClick={handleSaveChanges}
-                          >
-                            Add Service
-                          </Button>
-                        </Modal.Footer>
-                      </Modal>
-                    </Form>
-                  </td>
+            {category.map((s) => (
+              <Button
+                variant="outline-primary"
+                onClick={() => setSearchcategory(s.categoryId)}
+                key={s.categoryId}
+              >
+                <span class="button-content">{s.categoryName}</span>
+              </Button>
+            ))}
+            <h3 className="text-dark text-center">Services</h3>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12}>
+            <Table className="table-striped">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Bi</th>
+                  <th>price</th>
+                  <th></th>
+                  <th>Image</th>
+                  <th>Detail</th>
+                  <th>Book</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-      <Row>
-        <Col xs={12} className="text-center">
-          {totalPage === 1 ? (
-            <span></span>
-          ) : (
-            numbers.map((number) => (
-              <React.Fragment key={number}>
-                <Button
-                  className={number + 1 === currentpage ? "btn-dark" : ""}
-                  onClick={() => setcurrentpage(number + 1)}
-                >
-                  {number + 1}
-                </Button>
-                {<span className="mx-0"></span>}{" "}
-                {/* Thêm khoảng trống giữa các nút */}
-              </React.Fragment>
-            ))
-          )}
-        </Col>
-      </Row>
+              </thead>
+              <tbody>
+                {service.map((p) => (
+                  <tr key={p.service_id}>
+                    <td>{p.title}</td>
+                    <td>{p.bi}</td>
+                    <td>{p.price}</td>
+                    <td>{p.re_name}</td>
+                    <td>
+                      <img src={p.imagelink} onError={handleImageError} alt="Service Image" />
+                    </td>
+                    <td>
+
+                      <Link to={`/service_detail/${p.service_id}`}>
+                        <Button variant="outline-warning">Chi tiết dịch vụ</Button></Link>
+                      {" "}
+                    </td>
+                    <td>
+                      <Button onClick={() => handleOrder(p)} variant="outline-success" data-toggle="modal" data-target="#exampleModal">
+                        Đặt dịch vụ
+                      </Button>{" "}
+                      <Form name="formData" onSubmit={handleSaveChanges}>
+                        <Modal show={show} onHide={handleClose}>
+                          <Modal.Header closeButton>
+                            <Modal.Title>Modal heading</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <label>Quantity</label>
+                            <Form.Control
+                              type="number"
+                              ref={quantityRef}
+                              name="quantity"
+                              placeholder="Quantity"
+                              className="mb-3"
+                              defaultValue={1}
+                              min={1}
+                              step={1}
+                            />
+                            <label>Number Of Person</label>
+                            <Form.Control
+                              type="number"
+                              ref={numOfPersonRef}
+                              name="numOfPerson"
+                              placeholder="Number Of Person"
+                              className="mb-3"
+                              defaultValue={1}
+                              min={1}
+                              step={1}
+                            />
+                            <label>Doctor</label>
+                            <Form.Control
+                              as="select"
+                              ref={doctorRef}
+                              name="selectedDoctor"
+                              className="form-control mb-3"
+                            >
+                              {doctor.map((doctor) => (
+                                <option key={doctor.userID} value={doctor.userID}>
+                                  {doctor.name}
+                                </option>
+                              ))}
+                            </Form.Control>
+                            <label>Nurse</label>
+                            <Form.Control
+                              as="select"
+                              ref={nurseRef}
+                              name="selectedNurse"
+                              className="form-control mb-3"
+                            >
+                              {nurse.map((nurse) => (
+                                <option key={nurse.userID} value={nurse.userID}>
+                                  {nurse.name}
+                                </option>
+                              ))}
+                            </Form.Control>
+                            <label>Slot</label>
+                            <Form.Control
+                              as="select"
+                              ref={slotRef}
+                              name="selectedSlot"
+                              className="form-control mb-3"
+                            >
+                              <option key={1} value={1}>
+                                1
+                              </option>
+                              <option key={2} value={2}>
+                                2
+                              </option>
+                              <option key={3} value={3}>
+                                3
+                              </option>
+                              <option key={4} value={4}>
+                                4
+                              </option>
+                            </Form.Control>
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button variant="primary" type="submit" onClick={handleSaveChanges}>
+                              Add Service
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
+                      </Form>
+
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs={12} className="text-center">
+            {totalPage === 1 ? (
+              <span></span>
+            ) : (
+              numbers.map((number) => (
+                <React.Fragment key={number}>
+                  <Button className={number + 1 === currentpage ? "btn-dark" : ""}
+                    onClick={() => setcurrentpage(number + 1)}>
+                    {number + 1}
+                  </Button>
+                  {<span className="mx-0"></span>} {/* Thêm khoảng trống giữa các nút */}
+                </React.Fragment>
+              ))
+            )}
+          </Col>
+        </Row>
+      </div>
+
+
     </UserTemplate>
   );
 }
