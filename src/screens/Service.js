@@ -3,10 +3,9 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import UserTemplate from "../templates/UserTemplate";
 import React, { useState, useEffect, useRef } from "react";
-import Modal from 'react-bootstrap/Modal';
-import Form from 'react-bootstrap/Form';
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
 import axios from "axios";
-
 
 export default function Service() {
   const [show, setShow] = useState(false);
@@ -38,17 +37,35 @@ export default function Service() {
     const selectedDoctor = parseInt(doctorRef.current.value, 10);
     const selectedNurse = parseInt(nurseRef.current.value, 10);
     const selectedSlot = parseInt(slotRef.current.value, 10);
-    const price = parseInt(selectedServiceId.price)
-    handleOrderService(serviceId, title, quantity, numOfPerson, selectedDoctor, selectedNurse, selectedSlot, price);
+    const price = parseInt(selectedServiceId.price);
+    handleOrderService(
+      serviceId,
+      title,
+      quantity,
+      numOfPerson,
+      selectedDoctor,
+      selectedNurse,
+      selectedSlot,
+      price
+    );
     handleClose(); // Đóng modal sau khi đã lưu thay đổi
   };
-  const handleOrderService = (serviceId, title, quantity, numOfPerson, selectedDoctor, selectedNurse, selectedSlot, price) => {
+  const handleOrderService = (
+    serviceId,
+    title,
+    quantity,
+    numOfPerson,
+    selectedDoctor,
+    selectedNurse,
+    selectedSlot,
+    price
+  ) => {
     // Lấy danh sách các serviceId từ Local Storage (nếu có)
-    const storedService = JSON.parse(localStorage.getItem('Service'));
-    var listCart = JSON.parse(localStorage.getItem('Service'));
+    const storedService = JSON.parse(localStorage.getItem("Service"));
+    var listCart = JSON.parse(localStorage.getItem("Service"));
 
     if (listCart === null) {
-      listCart = []
+      listCart = [];
     }
     var cartItem = {
       cartId: listCart.length + 1,
@@ -60,13 +77,13 @@ export default function Service() {
       nurse: selectedNurse,
       slot: selectedSlot,
       price: price,
-    }
+    };
     listCart.push(cartItem);
     if (!storedService) {
-      localStorage.setItem('Service', JSON.stringify(listCart));
+      localStorage.setItem("Service", JSON.stringify(listCart));
     } else {
       const updatedService = [...storedService, cartItem];
-      localStorage.setItem('Service', JSON.stringify(updatedService));
+      localStorage.setItem("Service", JSON.stringify(updatedService));
     }
   };
   useEffect(() => {
@@ -90,7 +107,7 @@ export default function Service() {
     } catch (error) {
       console.error("Error fetching data role: ", error);
     }
-  }
+  };
   let [searchcategory, setSearchcategory] = useState(-1);
   const [service, setService] = useState([]);
   const [category, setCategory] = useState([]);
@@ -107,11 +124,9 @@ export default function Service() {
       .catch((error) => {
         console.error(error);
       });
-
   });
 
   useEffect(() => {
-
     setcurrentpage(1);
     handleSearch();
   }, [searchcategory]);
@@ -131,7 +146,7 @@ export default function Service() {
       .catch((error) => {
         console.error(error);
       });
-    handlePage()
+    handlePage();
   };
   // var page = servicePage.length / pagesize;
   // if(servicePage.length % pagesize ==0){
@@ -153,7 +168,8 @@ export default function Service() {
       });
   };
   const handleImageError = (e) => {
-    e.target.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBONcJOzAAsu-WtDfk0Sr3QNGcTSnonIpRBQ&usqp=CAU'; // Thay thế bằng đường dẫn của ảnh mặc định (abc.jpg)
+    e.target.src =
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBONcJOzAAsu-WtDfk0Sr3QNGcTSnonIpRBQ&usqp=CAU"; // Thay thế bằng đường dẫn của ảnh mặc định (abc.jpg)
   };
   return (
     <UserTemplate>
@@ -188,22 +204,32 @@ export default function Service() {
                   <td>{p.price}</td>
                   <td>{p.re_name}</td>
                   <td>
-                    <img src={p.imagelink} onError={handleImageError} alt="Service Image" />
+                    <img
+                      src={p.imagelink}
+                      onError={handleImageError}
+                      alt="Service Image"
+                    />
                   </td>
                   <td>
-
                     <Link to={`/service_detail/${p.service_id}`}>
-                      <Button variant="outline-success">Chi tiết dịch vụ</Button></Link>
-                    {" "}
+                      <Button variant="outline-success">
+                        Chi tiết dịch vụ
+                      </Button>
+                    </Link>{" "}
                   </td>
                   <td>
-                    <Button onClick={() => handleOrder(p)} variant="outline-success" data-toggle="modal" data-target="#exampleModal">
+                    <Button
+                      onClick={() => handleOrder(p)}
+                      variant="outline-success"
+                      data-toggle="modal"
+                      data-target="#exampleModal"
+                    >
                       Đặt dịch vụ
                     </Button>{" "}
                     <Form name="formData" onSubmit={handleSaveChanges}>
                       <Modal show={show} onHide={handleClose}>
                         <Modal.Header closeButton>
-                          <Modal.Title>Modal heading</Modal.Title>
+                          <Modal.Title>Add Cart</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                           <label>Quantity</label>
@@ -276,13 +302,16 @@ export default function Service() {
                           </Form.Control>
                         </Modal.Body>
                         <Modal.Footer>
-                          <Button variant="primary" type="submit" onClick={handleSaveChanges}>
+                          <Button
+                            variant="primary"
+                            type="submit"
+                            onClick={handleSaveChanges}
+                          >
                             Add Service
                           </Button>
                         </Modal.Footer>
                       </Modal>
                     </Form>
-
                   </td>
                 </tr>
               ))}
@@ -297,17 +326,19 @@ export default function Service() {
           ) : (
             numbers.map((number) => (
               <React.Fragment key={number}>
-                <Button className={number + 1 === currentpage ? "btn-dark" : ""}
-                  onClick={() => setcurrentpage(number + 1)}>
+                <Button
+                  className={number + 1 === currentpage ? "btn-dark" : ""}
+                  onClick={() => setcurrentpage(number + 1)}
+                >
                   {number + 1}
                 </Button>
-                {<span className="mx-0"></span>} {/* Thêm khoảng trống giữa các nút */}
+                {<span className="mx-0"></span>}{" "}
+                {/* Thêm khoảng trống giữa các nút */}
               </React.Fragment>
             ))
           )}
         </Col>
       </Row>
-
     </UserTemplate>
   );
 }
