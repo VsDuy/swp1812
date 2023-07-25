@@ -27,8 +27,15 @@ const Cart = () => {
     beginTime: Date,
   };
 
-  const [editedCart, setEditedCart] = useState([cartItem]);
-  
+  const [editedCart, setEditedCart] = useState();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedCart({
+      ...editedCart,
+      [name]: value,
+    });
+  };
 
   useEffect(() => {
     fetchDataFromAPI();
@@ -79,26 +86,25 @@ const Cart = () => {
     }
   };
 
+  // Kiểm tra xem có mục nào khác trong giỏ hàng có cùng serviceId và slot không
   const handleSlotSelection = (cartId, serviceId, selectedSlot) => {
-    // Kiểm tra xem có mục nào khác trong giỏ hàng có cùng serviceId và slot không
-    const isDuplicate = services.some(
+   
+    const cartItem = serviceId.find(
+      (item) =>  (item.cartId !== cartId)
+    )
+    const existingItem = serviceId.find(
       (item) =>
-        item.cartId !== cartId &&
-        item.serviceId === serviceId &&
-        selectedSlots[item.cartId] === selectedSlot
+        (item.cartId !== cartItem.cartId &&
+        item.beginTime === cartItem.beginTime &&
+        item.serviceId === serviceId && 
+        item.slot === selectedSlot) 
     );
+    if (existingItem) {
+      toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
+    } else {
 
-    // Nếu có mục trùng, in ra cảnh báo ngay lập tức
-    if (isDuplicate) {
-      alert("Cảnh báo: Slot đã được chọn bởi mục khác trong giỏ hàng.");
-      return; // Dừng xử lý tiếp theo khi có cảnh báo
-    }
-
-    // Lưu giá trị slot được chọn vào state selectedSlots
-    setSelectedSlots((prevSelectedSlots) => ({
-      ...prevSelectedSlots,
-      [cartId]: selectedSlot,
-    }));
+  }
+ 
   };
 
   const checkDuplicateSlot = (cart, selectedCartId, selectedSlot) => {
@@ -112,9 +118,23 @@ const Cart = () => {
   };
 
   const handleQuantityChange = (cartId, newQuantity) => {
-    // Tạo một bản sao của đối tượng quantityList để thay đổi số lượng cho mục cụ thể
-    const updatedQuantityList = { ...quantityList, [cartId]: newQuantity };
-    setQuantityList(updatedQuantityList);
+    if (Number.isInteger(newQuantity) && newQuantity > 0) {
+      const updatedCart = services.map((x) => {
+        if (x.cartId === cartId) {
+          // Thay đổi thông tin ở đây nếu muốn cập nhật thông tin cụ thể
+          return { ...x, quantity:newQuantity,price:newQuantity*x.priceService };
+        }
+        return x;
+      });
+      setServices(updatedCart);
+      localStorage.setItem("Service", JSON.stringify(updatedCart));
+      // Tạo một bản sao của đối tượng quantityList để thay đổi số lượng cho mục cụ thể
+      // const updatedQuantityList = { ...quantityList, [cartId]: newQuantity };
+      // setQuantityList(updatedQuantityList);
+      // console.log(quantityList);
+    } else {
+      toast.error("Cannot input");
+    }
   };
 
   return (
@@ -140,6 +160,7 @@ const Cart = () => {
                         <th>Nurse</th>
                         <th>Slot</th>
                         <th>Price</th>
+                        <th>Total</th>
                         <th>Delete</th>
                       </tr>
                     </thead>
@@ -152,7 +173,7 @@ const Cart = () => {
                               type="number"
                               min={1}
                               step={1}
-                              value={quantityList[item.cartId] || 1}
+                              value={item.quantity || 1}
                               onChange={(e) =>
                                 handleQuantityChange(
                                   item.cartId,
@@ -214,8 +235,8 @@ const Cart = () => {
                                   )
                                 }
                               >
-                                <option value={1}>1</option>
-                                <option value={2}>2</option>
+                                <option key={1} value={1}>1</option>
+                                <option key={2} value={2}>2</option>
                                 <option value={3}>3</option>
                                 <option value={4}>4</option>
                               </select>
@@ -223,7 +244,12 @@ const Cart = () => {
                           </td>
                           <td>
                             <span className="text-success">
-                              ${item.price * (quantityList[item.cartId] || 1)}
+                              {item.priceService}$
+                            </span>
+                          </td>
+                          <td>
+                            <span className="text-success">
+                              {item.price}$
                             </span>
                           </td>
                           <td>
@@ -240,7 +266,9 @@ const Cart = () => {
                       ))}
                     </tbody>
                   </Table>
-                  <button className="btn btn-primary float-right">Thanh toán</button>
+                  <button className="btn btn-primary float-right">
+                    Thanh toán
+                  </button>
                 </>
               )}
             </Col>

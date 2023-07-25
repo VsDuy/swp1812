@@ -98,7 +98,7 @@ export default function Service() {
       doctor: selectedDoctor,
       nurse: selectedNurse,
       slot: selectedSlot,
-      price: price,
+      price: price*quantity,
       priceService: priceService,
       userId: 1,
       beginTime: dateBook,
@@ -118,19 +118,19 @@ export default function Service() {
     } catch (error) {
       return;
     }
-    const existingItem = listCart.find(
-      (item) =>
-        (item.cartId !== cartItem.cartId &&
-        item.beginTime === cartItem.beginTime &&
-        item.serviceId === serviceId && 
-        item.slot === selectedSlot) 
-        ||(item.beginTime === cartItem.beginTime 
-          &&  item.slot === selectedSlot
-          &&  (item.doctor === selectedDoctor || item.nurse === selectedNurse))
-    );
-    if (existingItem) {
-      toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
-    } else {
+    // const existingItem = listCart.find(
+    //   (item) =>
+    //     (item.cartId !== cartItem.cartId &&
+    //     item.beginTime === cartItem.beginTime &&
+    //     item.serviceId === serviceId && 
+    //     item.slot === selectedSlot) 
+    //     ||(item.beginTime === cartItem.beginTime 
+    //       &&  item.slot === selectedSlot
+    //       &&  (item.doctor === selectedDoctor || item.nurse === selectedNurse))
+    // );
+    // if (existingItem) {
+    //   toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
+    // } else {
       listCart.push(cartItem);
       if (!storedService) {
         localStorage.setItem("Service", JSON.stringify(listCart));
@@ -140,7 +140,7 @@ export default function Service() {
       }
       handleClose(); // Đóng modal sau khi đã lưu thay đổi
       toast.success("Appointment successful");
-    }
+    // }
   };
 
   const fetchDataFromAPICheck = async (cartItem) => {};
