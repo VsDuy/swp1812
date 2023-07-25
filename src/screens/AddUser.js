@@ -15,17 +15,17 @@ export default function AddAccount() {
 
   const fetchDataFromAPI = async () => {
     try {
-        const userObject = {
-            "userID": 0,
-            "name": "",
-            "gender": 1,
-            "address": "",
-            "email": "",
-            "phone": "",
-            "roleID": 1,
-            "status": 1,
-            "roleName": ""
-          };
+      const userObject = {
+        userID: 0,
+        name: "",
+        gender: 1,
+        address: "",
+        email: "",
+        phone: "",
+        roleID: 1,
+        status: 1,
+        roleName: "",
+      };
       setEditedAccountInfo(userObject);
     } catch (error) {
       console.error("Error fetching data user: ", error);
@@ -50,14 +50,36 @@ export default function AddAccount() {
 
   const handleSave = async () => {
     try {
-      console.log(editedAccountInfo);
-      await axios.put(
+      if (editedAccountInfo.name.trim() === "") {
+        toast.error("Name cannot be left blank");
+        return;
+      }
+      if (editedAccountInfo.email.trim() === "") {
+        toast.error("Email cannot be left blank");
+        return;
+      }
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(editedAccountInfo.email.trim())) {
+        toast.error("Email không hợp lệ");
+        return;
+      }
+      if (editedAccountInfo.phone.trim() === "") {
+        toast.error("Phone cannot be left blank");
+        return;
+      }
+      if (editedAccountInfo.address.trim() === "") {
+        toast.error("Address cannot be left blank");
+        return;
+      }
+
+       await axios.put(
         "http://localhost:8080/api/ccg1/users/update",
         editedAccountInfo
       );
       // console.log("Thông tin tài khoản đã được cập nhật.");
       toast.success("Update success");
     } catch (error) {
+      toast.error("Information cannot be duplicated");
       console.error("Error saving data:", error);
     }
   };

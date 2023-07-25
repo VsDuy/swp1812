@@ -7,6 +7,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import UserTemplate from "../templates/UserTemplate";
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
+import { toast } from "react-toastify";
 
 export default function ManagerServiceList() {
   const [service, setService] = useState([]);
@@ -139,8 +140,8 @@ export default function ManagerServiceList() {
     )
       .then((res) => res.json())
       .then((result) => {
-        console.log(result.data);
-        alert("Delete ok");
+        // console.log(result.data);
+        toast.success("Delete ok")
         handleSearch();
       })
       .catch((error) => {
@@ -181,7 +182,7 @@ export default function ManagerServiceList() {
     )
       .then((response) => {
         handleSearch();
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error(error);

@@ -18,7 +18,7 @@ const Cart = () => {
   useEffect(() => {
     var tota = 0;
     for (const [index, item] of services.entries()) {
-      tota += item.price
+      tota += item.price;
     }
     setTotal(tota);
   }, [services]);
@@ -70,8 +70,14 @@ const Cart = () => {
   };
 
   // Kiểm tra xem có mục nào khác trong giỏ hàng có cùng serviceId và slot không
-  const handleSlotSelection = (cartId, selectedSlot, doctorId, nurseId) => {
-    handleChange(cartId, selectedSlot, doctorId, nurseId);
+  const handleSlotSelection = (
+    cartId,
+    selectedSlot,
+    doctorId,
+    nurseId,
+    date
+  ) => {
+    handleChange(cartId, selectedSlot, doctorId, nurseId, date);
     // const cartItem = services.find((item) => item.cartId == cartId);
     // const existingItem = services.find(
     //   (item) =>
@@ -104,28 +110,177 @@ const Cart = () => {
     // }
   };
 
-  const handleDoctorSelection = (cartId, doctorId, selectedSlot, nurseId) => {
-    handleChange(cartId, selectedSlot, doctorId, nurseId);
+  const handleNumber = (cartId, number) => {
+    if (Number.isInteger(number) && number > 0) {
+      let foundIndex = -1; // Biến lưu chỉ số của phần tử cần cập nhật
+
+      // Cập nhật cartItem vào services
+      for (const [index, item] of services.entries()) {
+        if (item.cartId == cartId) {
+          foundIndex = index; // Lưu chỉ số của phần tử cần cập nhật
+          break; // Thoát khỏi vòng lặp khi tìm thấy phần tử
+        }
+      }
+      if (foundIndex != NaN && foundIndex !== -1) {
+        // Thực hiện cập nhật phần tử
+        const updatedCart = [...services]; // Tạo một bản sao của mảng services để tránh cập nhật trực tiếp vào mảng gốc
+        updatedCart[foundIndex].numOfPerson = number;
+        setServices(updatedCart); // Cập nhật state của services với giá trị mới
+        localStorage.setItem("Service", JSON.stringify(updatedCart));
+      }
+    } else {
+      toast.error("Cannot input");
+    }
   };
-  const handleNuurseSelection = (cartId, nurseId, doctorId, selectedSlot) => {
-    handleChange(cartId, selectedSlot, doctorId, nurseId);
+
+  const handleDoctorSelection = (
+    cartId,
+    doctorId,
+    selectedSlot,
+    nurseId,
+    date
+  ) => {
+    handleChange(cartId, selectedSlot, doctorId, nurseId, date);
+  };
+  const handleNuurseSelection = (
+    cartId,
+    nurseId,
+    doctorId,
+    selectedSlot,
+    date
+  ) => {
+    handleChange(cartId, selectedSlot, doctorId, nurseId, date);
+  };
+  const handleDateSelection = (
+    cartId,
+    date,
+    nurseId,
+    doctorId,
+    selectedSlot
+  ) => {
+    if (date < getCurrentDate()) {
+      toast.error("Date must in future");
+      return;
+    }
+    handleChange(cartId, selectedSlot, doctorId, nurseId, date);
   };
 
   const submitCart = async () => {
-    console.log(services);
+    var checkSubmit = true;
+    const servicesLength = services.length;
+    console.log(servicesLength);
+    for (var i = 0; i < servicesLength; i++) {
+      var item = services[i];
+      // console.log(item)
+      for (var j = i + 1; j < servicesLength; j++) {
+        var cartItemSub = services[j];
+        console.log(cartItemSub);
+        console.log(
+          (item.cartId !== cartItemSub.cartId &&
+            item.beginTime === cartItemSub.beginTime &&
+            item.serviceId === cartItemSub.serviceId &&
+            item.slot === cartItemSub.slot ) ||
+          (item.beginTime === cartItemSub.beginTime &&
+            item.slot === cartItemSub.slot &&
+            (item.doctor == cartItemSub.doctor ||
+              item.nurse == cartItemSub.nurse))
+        );
+        if (
+          (item.cartId !== cartItemSub.cartId &&
+            item.beginTime === cartItemSub.beginTime &&
+            item.serviceId === cartItemSub.serviceId &&
+            item.slot === cartItemSub.slot ) ||
+          (item.beginTime === cartItemSub.beginTime &&
+            item.slot === cartItemSub.slot &&
+            (item.doctor == cartItemSub.doctor ||
+              item.nurse == cartItemSub.nurse))
+        ) {
+          document.getElementById("cart_" + cartItemSub.cartId).style.backgroundColor =
+            "#dbb9b6";
+          checkSubmit = false;
+        } else {
+          document.getElementById("cart_" + cartItemSub.cartId).style.backgroundColor =
+            "";
+        }
+      }
+    }
+
+    if (checkSubmit) {
+      for (const [index, item] of services.entries()) {
+        try {
+          const response = await axios.put(
+            "http://localhost:8080/api/ccg1/reservation/checkCart",
+            item
+          ); // Thay 'URL_API' bằng URL API thực tế
+          console.log(response.data);
+          if (response.data === 1) {
+            document.getElementById(
+              "cart_" + item.cartId
+            ).style.backgroundColor = "#dbb9b6";
+            checkSubmit = false;
+          } else {
+            document.getElementById(
+              "cart_" + item.cartId
+            ).style.backgroundColor = "";
+          }
+        } catch (error) {
+          return;
+        }
+      }
+
+      if (checkSubmit) {
+        var cartDto = {
+          cards: services,
+          total: total,
+          note: "",
+          userId: 1,
+        };
+        console.log("a" + JSON.stringify(cartDto));
+        try {
+          const response = await axios.put(
+            "http://localhost:8080/api/ccg1/reservation/checkCart",
+            cartDto
+          ); // Thay 'URL_API' bằng URL API thực tế
+          console.log(response.data);
+          if (response.data === 1) {
+            // Xử lý thành công
+          }
+        } catch (error) {
+          // Xử lý lỗi
+          return;
+        }
+      }
+    }
   };
 
-  const handleChange = async (cartId, selectedSlot, doctorId, nurseId) => {
+  const getCurrentDate = () => {
+    const today = new Date();
+    today.setDate(today.getDate() + 1); // Tăng giá trị ngày lên 1 để lấy ngày tiếp theo
+    const day = today.getDate().toString().padStart(2, "0");
+    const month = (today.getMonth() + 1).toString().padStart(2, "0");
+    const year = today.getFullYear();
+
+    return `${year}-${month}-${day}`;
+  };
+  const handleChange = async (
+    cartId,
+    selectedSlot,
+    doctorId,
+    nurseId,
+    date
+  ) => {
+ 
     const cartItem = services.find((item) => item.cartId == cartId);
     cartItem.slot = selectedSlot;
     cartItem.doctor = doctorId;
     cartItem.nurse = nurseId;
+    cartItem.beginTime = date;
     try {
       const response = await axios.put(
         "http://localhost:8080/api/ccg1/reservation/checkCart",
         cartItem
       ); // Thay 'URL_API' bằng URL API thực tế
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data === 1) {
         toast.error("Looks like the doctor or nurse already has this schedule");
         return;
@@ -136,19 +291,15 @@ const Cart = () => {
     }
     const existingItem = services.find(
       (item) =>
-        (item.cartId !== cartItem.cartId &&
-          item.beginTime === cartItem.beginTime &&
-          item.serviceId === cartItem.serviceId &&
-          item.slot == selectedSlot &&
-          (item.doctor === doctorId || item.nurse === nurseId)) ||
-        (item.beginTime === cartItem.beginTime &&
-          item.slot === selectedSlot &&
-          (item.doctor === doctorId || item.nurse === nurseId))
+        item.cartId !== cartItem.cartId &&
+        item.beginTime === cartItem.beginTime &&
+        item.serviceId === cartItem.serviceId &&
+        item.slot == selectedSlot
     );
     if (existingItem) {
       toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
-    } else {
-      console.log(existingItem);
+    } else { 
+      // console.log(existingItem);
       let foundIndex = -1; // Biến lưu chỉ số của phần tử cần cập nhật
 
       // Cập nhật cartItem vào services
@@ -164,8 +315,47 @@ const Cart = () => {
         updatedCart[foundIndex] = cartItem;
         setServices(updatedCart); // Cập nhật state của services với giá trị mới
         localStorage.setItem("Service", JSON.stringify(updatedCart));
+
+        const servicesLength = services.length;
+        console.log(servicesLength);
+        for (var i = 0; i < servicesLength; i++) {
+          var item = services[i];
+          // console.log(item)
+          for (var j = i + 1; j < servicesLength; j++) {
+            var cartItemSub = services[j];
+            // console.log(cartItemSub);
+            // console.log(
+            //   (item.cartId !== cartItemSub.cartId &&
+            //     item.beginTime === cartItemSub.beginTime &&
+            //     item.serviceId === cartItemSub.serviceId &&
+            //     item.slot === cartItemSub.slot ) ||
+            //   (item.beginTime === cartItemSub.beginTime &&
+            //     item.slot === cartItemSub.slot &&
+            //     (item.doctor == cartItemSub.doctor ||
+            //       item.nurse == cartItemSub.nurse))
+            // );
+            if (
+              (item.cartId !== cartItemSub.cartId &&
+                item.beginTime === cartItemSub.beginTime &&
+                item.serviceId === cartItemSub.serviceId &&
+                item.slot === cartItemSub.slot ) ||
+              (item.beginTime === cartItemSub.beginTime &&
+                item.slot === cartItemSub.slot &&
+                (item.doctor == cartItemSub.doctor ||
+                  item.nurse == cartItemSub.nurse))
+            ) {
+              document.getElementById("cart_" + cartItemSub.cartId).style.backgroundColor =
+                "#dbb9b6";
+            } else {
+              document.getElementById("cart_" + cartItemSub.cartId).style.backgroundColor =
+                "";
+            }
+          }
+        }
+
       }
     }
+
   };
 
   const handleQuantityChange = (cartId, newQuantity) => {
@@ -214,6 +404,7 @@ const Cart = () => {
                         <th>Doctor</th>
                         <th>Nurse</th>
                         <th>Slot</th>
+                        <th>Medical examination day</th>
                         <th>Price</th>
                         <th>Total</th>
                         <th>Delete</th>
@@ -221,7 +412,7 @@ const Cart = () => {
                     </thead>
                     <tbody>
                       {services.map((item) => (
-                        <tr key={item.cartId}>
+                        <tr id={"cart_" + item.cartId} key={item.cartId}>
                           <td>{item.title}</td>
                           <td>
                             <Form.Control
@@ -242,7 +433,10 @@ const Cart = () => {
                               type="number"
                               min={1}
                               step={1}
-                              defaultValue={1}
+                              onChange={(e) =>
+                                handleNumber(item.cartId, e.target.value)
+                              }
+                              value={item.numOfPerson}
                             />
                           </td>
                           <td style={{ width: "200px" }}>
@@ -254,7 +448,8 @@ const Cart = () => {
                                     item.cartId,
                                     e.target.value,
                                     item.slot,
-                                    item.nurse
+                                    item.nurse,
+                                    item.beginTime
                                   )
                                 }
                                 value={item.doctor}
@@ -281,7 +476,8 @@ const Cart = () => {
                                     item.cartId,
                                     e.target.value,
                                     item.doctor,
-                                    item.slot
+                                    item.slot,
+                                    item.beginTime
                                   )
                                 }
                                 value={item.nurse}
@@ -299,7 +495,7 @@ const Cart = () => {
                               </select>
                             </div>
                           </td>
-                          <td style={{ width: "80px" }}>
+                          <td style={{ width: "100px" }}>
                             <div className="input-group mb-5">
                               <select
                                 className="custom-select"
@@ -308,7 +504,8 @@ const Cart = () => {
                                     item.cartId,
                                     e.target.value,
                                     item.doctor,
-                                    item.nurse
+                                    item.nurse,
+                                    item.beginTime
                                   )
                                 }
                                 value={item.slot}
@@ -319,6 +516,25 @@ const Cart = () => {
                                 <option value={4}>4</option>
                               </select>
                             </div>
+                          </td>
+                          <td>
+                            <Form.Control
+                              type="date"
+                              name="dateBook"
+                              placeholder="Quantity"
+                              className="mb-3"
+                              onChange={(e) =>
+                                handleDateSelection(
+                                  item.cartId,
+                                  e.target.value,
+                                  item.nurse,
+                                  item.doctor,
+                                  item.slot
+                                )
+                              }
+                              value={item.beginTime} // Đặt giá trị mặc định là ngày/tháng/năm hiện tại
+                              min={getCurrentDate()} // Không cho phép chọn ngày quá khứ
+                            />
                           </td>
                           <td>
                             <span className="text-success">
@@ -342,7 +558,7 @@ const Cart = () => {
                       ))}
                     </tbody>
                   </Table>
-                  <h4>Total</h4>
+                  <h4 className="text-success">Total: {total}$</h4>
                   <button
                     onClick={() => {
                       submitCart();
