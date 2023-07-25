@@ -59,6 +59,8 @@ const ManageReservation = () => {
                                         <th>Status</th>
                                         <th>Total Price</th>
                                         <th>User ID</th>
+                                        <th>Action</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,6 +71,13 @@ const ManageReservation = () => {
                                         <td>enable</td>
                                         <td>$ 1000</td>
                                         <td>1</td>
+                                        <td>
+                                            <button className='btn btn-outline-warning'>Detail</button>
+                                        </td>
+                                        <td>
+                                            <button className='btn btn-outline-danger'>Cancel</button>
+                                        </td>
+
                                     </tr>
                                     <tr>
                                         <td>1</td>
@@ -77,6 +86,13 @@ const ManageReservation = () => {
                                         <td>enable</td>
                                         <td>$ 1000</td>
                                         <td>1</td>
+                                        <td>
+                                            <button className='btn btn-outline-warning'>Detail</button>
+                                        </td>
+                                        <td>
+                                            <button className='btn btn-outline-danger'>Cancel</button>
+                                        </td>
+
                                     </tr>
                                     <tr>
                                         <td>1</td>
@@ -85,6 +101,13 @@ const ManageReservation = () => {
                                         <td>enable</td>
                                         <td>$ 1000</td>
                                         <td>1</td>
+                                        <td>
+                                            <button className='btn btn-outline-warning'>Detail</button>
+                                        </td>
+                                        <td>
+                                            <button className='btn btn-outline-danger'>Cancel</button>
+                                        </td>
+
                                     </tr>
                                 </tbody>
                             </Table>
