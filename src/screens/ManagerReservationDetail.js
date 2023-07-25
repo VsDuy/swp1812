@@ -1,11 +1,8 @@
 import React from 'react'
 import UserTemplate from "../templates/UserTemplate";
 import { Container, Row, Col, Table, Form, Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
 
-
-
-const manager_reservation_detail = () => {
+const ManagerReservationDetail = () => {
     return (
         <UserTemplate>
             <Container>
@@ -17,23 +14,53 @@ const manager_reservation_detail = () => {
                                 <Form.Control
                                     as="select"
                                     name="selected"
-                                    className="form-control mb-3 w-25"
+                                    className="form-control mb-3"
                                 >
                                     <option>
-                                        Status 1
+                                        Slot 1
                                     </option>
                                     <option>
-                                        Status 2
+                                        Slot 2
                                     </option>
                                     <option>
-                                        Status 2
+                                        Slot 2
                                     </option>
                                 </Form.Control>
 
                                 <Form.Control
                                     as="select"
                                     name="selected"
-                                    className="form-control mb-3 w-25"
+                                    className="form-control mb-3"
+                                >
+                                    <option>
+                                        Doctor 1
+                                    </option>
+                                    <option>
+                                        Doctor 2
+                                    </option>
+                                    <option>
+                                        Doctor 3
+                                    </option>
+                                </Form.Control>
+                                <Form.Control
+                                    as="select"
+                                    name="selected"
+                                    className="form-control mb-3"
+                                >
+                                    <option>
+                                        Nurse 1
+                                    </option>
+                                    <option>
+                                        Nurse 2
+                                    </option>
+                                    <option>
+                                        Nurse 3
+                                    </option>
+                                </Form.Control>
+                                <Form.Control
+                                    as="select"
+                                    name="selected"
+                                    className="form-control mb-3"
                                 >
                                     <option>
                                         Date 1
@@ -46,6 +73,20 @@ const manager_reservation_detail = () => {
                                     </option>
                                 </Form.Control>
                             </div>
+                            <div className='d-flex'>
+                                <button className='btn btn-outline-success'>Filte By Price</button>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="pice start"
+                                    className='w-25'
+                                />
+                                <Form.Control
+                                    type="number"
+                                    placeholder="pice end"
+                                    className='w-25'
+
+                                />
+                            </div>
 
                             <h3 className="text-dark text-center">Reservation</h3>
                         </Col>
@@ -55,12 +96,14 @@ const manager_reservation_detail = () => {
                             <Table className='table-striped'>
                                 <thead>
                                     <tr>
-                                        <th>Reservation ID</th>
-                                        <th>Created Date</th>
-                                        <th>Note</th>
-                                        <th>Status</th>
-                                        <th>Total Price</th>
-                                        <th>User ID</th>
+                                        <th>Reservation Detail ID</th>
+                                        <th>Begin Time</th>
+                                        <th>Doctor ID</th>
+                                        <th>Num Of Person</th>
+                                        <th>NurseID</th>
+                                        <th>Quantity</th>
+                                        <th>Slot</th>
+                                        <th>UserrID</th>
                                         <th>Action</th>
                                         <th>Action</th>
                                     </tr>
@@ -69,15 +112,15 @@ const manager_reservation_detail = () => {
                                     <tr>
                                         <td>1</td>
                                         <td>12/12/2020</td>
-                                        <td>ok</td>
-                                        <td>enable</td>
-                                        <td>$ 1000</td>
+                                        <td>1</td>
+                                        <td>3</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
                                         <td>1</td>
                                         <td>
-                                            <Link class="nav-link btn btn-outline-warning" to={`/manager_reservation_detail`}>
-                                                {" "}
-                                                Detail
-                                            </Link>
+                                            <button className='btn btn-outline-warning'>Detail</button>
+
                                         </td>
                                         <td>
                                             <button className='btn btn-outline-danger'>Cancel</button>
@@ -87,15 +130,15 @@ const manager_reservation_detail = () => {
                                     <tr>
                                         <td>1</td>
                                         <td>12/12/2020</td>
-                                        <td>ok</td>
-                                        <td>enable</td>
-                                        <td>$ 1000</td>
+                                        <td>1</td>
+                                        <td>3</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
                                         <td>1</td>
                                         <td>
-                                            <Link class="nav-link btn btn-outline-warning" to={`/manager_reservation_detail`}>
-                                                {" "}
-                                                Detail
-                                            </Link>
+                                            <button className='btn btn-outline-warning'>Detail</button>
+
                                         </td>
                                         <td>
                                             <button className='btn btn-outline-danger'>Cancel</button>
@@ -105,15 +148,15 @@ const manager_reservation_detail = () => {
                                     <tr>
                                         <td>1</td>
                                         <td>12/12/2020</td>
-                                        <td>ok</td>
-                                        <td>enable</td>
-                                        <td>$ 1000</td>
+                                        <td>1</td>
+                                        <td>3</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>1</td>
                                         <td>1</td>
                                         <td>
-                                            <Link class="nav-link btn btn-outline-warning" to={`/manager_reservation_detail`}>
-                                                {" "}
-                                                Detail
-                                            </Link>
+                                            <button className='btn btn-outline-warning'>Detail</button>
+
                                         </td>
                                         <td>
                                             <button className='btn btn-outline-danger'>Cancel</button>
@@ -130,4 +173,4 @@ const manager_reservation_detail = () => {
     )
 }
 
-export default manager_reservation_detail
+export default ManagerReservationDetail
