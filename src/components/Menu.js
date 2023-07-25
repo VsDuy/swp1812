@@ -99,7 +99,7 @@ export default function Menu() {
                                     <Dropdown.Item>
                                         <Link class="nav-link" to={`/manager_service`}>
                                             {" "}
-                                            Manager ServiceList
+                                            ServiceList Manager
                                         </Link>
                                     </Dropdown.Item>
                                     <Dropdown.Item>
@@ -109,11 +109,18 @@ export default function Menu() {
                                         </Link>
                                     </Dropdown.Item>
                                     <Dropdown.Item>
+                                        <Link class="nav-link" to={`/manager_reservation`}>
+                                            {" "}
+                                            Reservation Manager
+                                        </Link>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item>
                                         <Link class="nav-link" to={`/action-3`}>
                                             {" "}
                                             FeedbackList
                                         </Link>
                                     </Dropdown.Item>
+
                                 </Dropdown.Menu>
                             </Dropdown>
                         </li>
