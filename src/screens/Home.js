@@ -115,11 +115,11 @@ export default function Home() {
           className="row"
           style={{ textAlign: "center", backgroundColor: "#e3f2fd" }}
         >
-          Dich Vu Tieu Bieu
+          Special
         </h3>
-        <div className="row content d-flex jusify-content-around border-none" id="home">
+        <div className="row content d-flex justify-content-around border-none" id="home">
           {service.map((s) => (
-            <div className="product bg-white w-25 me-3 mb-3 d-flex flex-column justify-contnt-center align-items-center border-none">
+            <div style={{ width: 300 }} className="product bg-white me-3 mb-3 d-flex flex-column justify-contnt-cente align-items-center border-none">
               <Link to={`/service_detail/${s.service_id}`}>
                 <img src={s.imagelink} width="100%"
                   onError={handleImageError}

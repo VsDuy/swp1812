@@ -98,14 +98,14 @@ export default function Service() {
       doctor: selectedDoctor,
       nurse: selectedNurse,
       slot: selectedSlot,
-      price: price*quantity,
+      price: price * quantity,
       priceService: priceService,
       userId: 1,
       beginTime: dateBook,
     };
 
     try {
-      const response =  await axios.put(
+      const response = await axios.put(
         "http://localhost:8080/api/ccg1/reservation/checkCart",
         cartItem
       ); // Thay 'URL_API' bằng URL API thực tế
@@ -118,15 +118,16 @@ export default function Service() {
     } catch (error) {
       return;
     }
+
     const existingItem = listCart.find(
       (item) =>
         (item.cartId !== cartItem.cartId &&
-        item.beginTime === cartItem.beginTime &&
-        item.serviceId === serviceId && 
-        item.slot === selectedSlot) 
-        ||(item.beginTime === cartItem.beginTime 
-          &&  item.slot === selectedSlot
-          &&  (item.doctor === selectedDoctor || item.nurse === selectedNurse))
+          item.beginTime === cartItem.beginTime &&
+          item.serviceId === serviceId &&
+          item.slot === selectedSlot)
+        || (item.beginTime === cartItem.beginTime
+          && item.slot === selectedSlot
+          && (item.doctor === selectedDoctor || item.nurse === selectedNurse))
     );
     if (existingItem) {
       toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
@@ -141,9 +142,10 @@ export default function Service() {
       handleClose(); // Đóng modal sau khi đã lưu thay đổi
       toast.success("Appointment successful");
     }
+
   };
 
-  const fetchDataFromAPICheck = async (cartItem) => {};
+  const fetchDataFromAPICheck = async (cartItem) => { };
 
   useEffect(() => {
     fetchDataFromAPI();
@@ -296,7 +298,7 @@ export default function Service() {
                     <td>
                       <Link to={`/service_detail/${p.service_id}`}>
                         <Button variant="outline-warning">
-                          Chi tiết dịch vụ
+                          Detail
                         </Button>
                       </Link>{" "}
                     </td>
@@ -307,14 +309,13 @@ export default function Service() {
                         data-toggle="modal"
                         data-target="#exampleModal"
                       >
-                        Đặt dịch vụ
+                        Book
                       </Button>{" "}
                       <Form name="formData" onSubmit={handleSaveChanges}>
                         <Modal show={show} onHide={handleClose}>
                           <Modal.Header closeButton>
                             <Modal.Title>Book Service</Modal.Title>
 
-                            {/* Thêm biểu tượng "x" vào đây */}
                             <Button variant="secondary" onClick={handleClose}>
                               <span aria-hidden="true">&times;</span>
                             </Button>
