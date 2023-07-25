@@ -87,42 +87,50 @@ const Cart = () => {
   };
 
   // Kiểm tra xem có mục nào khác trong giỏ hàng có cùng serviceId và slot không
-  const handleSlotSelection = (cartId, serviceId, selectedSlot) => {
-   
-    const cartItem = serviceId.find(
-      (item) =>  (item.cartId !== cartId)
-    )
-    const existingItem = serviceId.find(
+  const handleSlotSelection = (cartId, selectedSlot) => {
+    const cartItem = services.find((item) => item.cartId == cartId);
+    const existingItem = services.find(
       (item) =>
-        (item.cartId !== cartItem.cartId &&
+        item.cartId !== cartItem.cartId &&
         item.beginTime === cartItem.beginTime &&
-        item.serviceId === serviceId && 
-        item.slot === selectedSlot) 
+        item.serviceId === cartItem.serviceId &&
+        item.slot == selectedSlot
     );
     if (existingItem) {
       toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
     } else {
+      let foundIndex = -1; // Biến lưu chỉ số của phần tử cần cập nhật
 
-  }
- 
+      // Cập nhật cartItem vào services
+      for (const [index, item] of services.entries()) {
+        if (item.cartId == cartId) {
+          foundIndex = index; // Lưu chỉ số của phần tử cần cập nhật
+          break; // Thoát khỏi vòng lặp khi tìm thấy phần tử
+        }
+      }
+
+      if (foundIndex != NaN && foundIndex !== -1 ) {
+        // Thực hiện cập nhật phần tử 
+        const updatedCart = [...services]; // Tạo một bản sao của mảng services để tránh cập nhật trực tiếp vào mảng gốc
+        updatedCart[foundIndex].slot = selectedSlot;
+        setServices(updatedCart); // Cập nhật state của services với giá trị mới
+        localStorage.setItem("Service", JSON.stringify(updatedCart));
+      }
+    }
   };
 
-  const checkDuplicateSlot = (cart, selectedCartId, selectedSlot) => {
-    const duplicateItem = cart.find(
-      (item) =>
-        item.cartId !== selectedCartId && // Tránh so sánh với chính mục đang xét
-        item.serviceId === selectedCartId.serviceId &&
-        item.selectedSlot === selectedSlot
-    );
-    return duplicateItem !== undefined;
-  };
+  
 
   const handleQuantityChange = (cartId, newQuantity) => {
     if (Number.isInteger(newQuantity) && newQuantity > 0) {
       const updatedCart = services.map((x) => {
         if (x.cartId === cartId) {
           // Thay đổi thông tin ở đây nếu muốn cập nhật thông tin cụ thể
-          return { ...x, quantity:newQuantity,price:newQuantity*x.priceService };
+          return {
+            ...x,
+            quantity: newQuantity,
+            price: newQuantity * x.priceService,
+          };
         }
         return x;
       });
@@ -140,7 +148,7 @@ const Cart = () => {
   return (
     <UserTemplate>
       <Container>
-        <div className="bg-white shadow p-5 rounded-2">
+        <div className="bg-white shadow p-3 rounded-2">
           <Row className="">
             <Col>
               <h3 className="text-primary">Danh sách Dịch vụ</h3>
@@ -182,7 +190,7 @@ const Cart = () => {
                               }
                             />
                           </td>
-                          <td>
+                          <td style={{ width: "30px" }}>
                             <Form.Control
                               type="number"
                               min={1}
@@ -190,7 +198,7 @@ const Cart = () => {
                               defaultValue={1}
                             />
                           </td>
-                          <td>
+                          <td style={{ width: "200px" }}>
                             <div className="input-group mb-3">
                               <select className="custom-select" id="doctor">
                                 {/* Hiển thị tên bác sĩ tương ứng với item.doctor */}
@@ -206,7 +214,7 @@ const Cart = () => {
                               </select>
                             </div>
                           </td>
-                          <td>
+                          <td style={{ width: "200px" }}>
                             <div className="input-group mb-3">
                               <select className="custom-select" id="nurse">
                                 {/* Hiển thị tên y tá tương ứng với item.nurse */}
@@ -222,21 +230,20 @@ const Cart = () => {
                               </select>
                             </div>
                           </td>
-                          <td>
-                            <div className="input-group mb-3">
+                          <td style={{ width: "80px" }}>
+                            <div className="input-group mb-5">
                               <select
                                 className="custom-select"
-                                id={`slot-${item.cartId}`}
                                 onChange={(e) =>
                                   handleSlotSelection(
                                     item.cartId,
-                                    item.serviceId,
                                     e.target.value
                                   )
                                 }
+                                value={item.slot}
                               >
-                                <option key={1} value={1}>1</option>
-                                <option key={2} value={2}>2</option>
+                                <option value={1}>1</option>
+                                <option value={2}>2</option>
                                 <option value={3}>3</option>
                                 <option value={4}>4</option>
                               </select>
@@ -248,9 +255,7 @@ const Cart = () => {
                             </span>
                           </td>
                           <td>
-                            <span className="text-success">
-                              {item.price}$
-                            </span>
+                            <span className="text-success">{item.price}$</span>
                           </td>
                           <td>
                             <a
