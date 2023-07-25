@@ -113,6 +113,26 @@ export default function Menu() {
                     </Dropdown.Menu>
                   </Dropdown>
                 </li>
+              ) : user.roleName === "Doctor" || user.roleName === "Nurse"  ? (
+                <li className="nav-item dropdown">
+                  <Dropdown>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                      Manager
+                    </Dropdown.Toggle> 
+                    <Dropdown.Menu> 
+                      <Dropdown.Item>
+                        <Link className="nav-link" to={`/manager_reservation`}>
+                          Reservation Manager
+                        </Link>
+                      </Dropdown.Item>
+                      <Dropdown.Item>
+                        <Link className="nav-link" to={`/action-3`}>
+                          FeedbackList
+                        </Link>
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </li>
               ) : null
             ) : null}
           </ul>

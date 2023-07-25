@@ -77,7 +77,7 @@ export default function AddAccount() {
         editedAccountInfo
       );
       // console.log("Thông tin tài khoản đã được cập nhật.");
-      toast.success("Update success");
+      toast.success("Add success");
     } catch (error) {
       toast.error("Information cannot be duplicated");
       console.error("Error saving data:", error);

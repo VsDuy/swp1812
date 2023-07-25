@@ -140,7 +140,7 @@ export default function ServiceDetail() {
         cartItem
       ); // Thay 'URL_API' bằng URL API thực tế
       console.log(response.data);
-      if (response.data === 1) {
+      if (response.data > 0) {
         toast.error("Looks like the doctor or nurse already has this schedule");
         return;
       } else {
