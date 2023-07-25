@@ -28,6 +28,7 @@ export default function ProfileUser() {
       ); // Thay 'URL_API' bằng URL API thực tế
       setRole(responseRole.data);
     } catch (error) {
+
       console.error("Error fetching data role: ", error);
     }
   };
@@ -50,6 +51,7 @@ export default function ProfileUser() {
       // console.log("Thông tin tài khoản đã được cập nhật.");
       toast.success("Update success");
     } catch (error) {
+      toast.error("Update faill");
       console.error("Error saving data:", error);
     }
   };
