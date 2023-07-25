@@ -8,12 +8,11 @@ import {
   Toast,
 } from "react-bootstrap";
 import { useState } from "react";
-import { Link, useNavigate ,useHistory } from "react-router-dom";
+import { Link, useNavigate, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import { login } from "../service/userService";
 import axios from "axios";
-
-
+import UserTemplate from "../templates/UserTemplate";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -30,7 +29,6 @@ export default function Login() {
     }
 
     try {
-      
       const response = await axios.post(
         "http://localhost:8080/api/ccg1/login",
         {
@@ -43,13 +41,13 @@ export default function Login() {
 
       // if()
       const { data } = response;
-      console.log(data)
+      console.log(data);
       // console.log(JSON.stringify(data));
       const user = data.userID;
-      
+
       if (!user) {
         toast.error("Email and password are incorrect");
-      }else{
+      } else {
         toast.success("login success");
         localStorage.setItem("token", user);
         nav("/");
@@ -92,67 +90,74 @@ export default function Login() {
   // };
 
   return (
-    <div>
-      <Container>
-        <Row className="vh-100 d-flex justify-content-center align-items-center">
-          <Col md={8} lg={6} xs={12}>
-            <div className="border border-3 border-primary"></div>
-            <Card className="shadow">
-              <Card.Body>
-                <div className="mb-3 mt-md-4">
-                  <h2 className="fw-bold mb-2 text-uppercase ">Login</h2>
+     
+    <UserTemplate>
+      <div>
+        <Container>
+          <Row className="vh-100 d-flex justify-content-center align-items-center">
+            <Col md={8} lg={6} xs={12}>
+              <div className="border border-3 border-primary"></div>
+              <Card className="shadow">
+                <Card.Body>
+                  <div className="mb-3 mt-md-4">
+                    <h2 className="fw-bold mb-2 text-uppercase ">Login</h2>
 
-                  <div className="mb-3">
-                    <Form onSubmit={handleSubmit}>
-                      <Form.Group className="mb-3" controlId="email">
-                        <Form.Label className="text-center">Email</Form.Label>
-                        <Form.Control
-                          type="email"
-                          placeholder="Enter email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                        />
-                      </Form.Group>
+                    <div className="mb-3">
+                      <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3" controlId="email">
+                          <Form.Label className="text-center">Email</Form.Label>
+                          <Form.Control
+                            type="email"
+                            placeholder="Enter email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                          />
+                        </Form.Group>
 
-                      <Form.Group
-                        className="mb-3"
-                        controlId="formBasicPassword"
-                      >
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                          type="password"
-                          placeholder="Password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                        />
-                      </Form.Group>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="formBasicPassword"
+                        >
+                          <Form.Label>Password</Form.Label>
+                          <Form.Control
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                        </Form.Group>
 
-                      <Form.Group
-                        className="mb-3"
-                        controlId="formBasicCheckbox"
-                      >
-                        <p className="small">
-                          <a className="text-primary" href="#!">
-                            Forgot password?
-                          </a>
-                        </p>
-                      </Form.Group>
-                      <div className="d-grid">
-                        <button class="button" variant="primary" type="submit">
-                          Login
-                          <div class="hoverEffect">
-                            <div></div>
-                          </div>
-                        </button>
-                      </div>
-                    </Form>
+                        <Form.Group
+                          className="mb-3"
+                          controlId="formBasicCheckbox"
+                        >
+                          <p className="small">
+                            <a className="text-primary" href="#!">
+                              Forgot password?
+                            </a>
+                          </p>
+                        </Form.Group>
+                        <div className="d-grid">
+                          <button
+                            class="button"
+                            variant="primary"
+                            type="submit"
+                          >
+                            Login
+                            <div class="hoverEffect">
+                              <div></div>
+                            </div>
+                          </button>
+                        </div>
+                      </Form>
+                    </div>
                   </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    </UserTemplate>
   );
 }

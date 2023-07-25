@@ -111,7 +111,7 @@ export default function ProfileUser() {
                     />
                   </div>
                   <div className="form-group">
-                    <label>Gender</label>
+                    {/* <label>Gender</label>
                     <div className="d-flex align-items-center">
                       <input
                         type="radio"
@@ -131,7 +131,7 @@ export default function ProfileUser() {
                         checked={editedAccountInfo.gender === 0}
                       />
                       <label className="ml-2">Female</label>
-                    </div>
+                    </div> */}
                   </div>
                   {/* <div className="form-group">
                     <label>Role</label>

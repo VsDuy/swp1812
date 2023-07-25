@@ -1,176 +1,80 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 import UserTemplate from "../templates/UserTemplate";
 import { Container, Row, Col, Table, Form, Button } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 
-const ManagerReservationDetail = () => {
-    return (
-        <UserTemplate>
-            <Container>
-                <div className='bg-white vh-100 shadow p-5'>
-                    <Row className="mb-3">
-                        <Col xs={12}>
-                            <span>Filter</span>
-                            <div className='d-flex'>
-                                <Form.Control
-                                    as="select"
-                                    name="selected"
-                                    className="form-control mb-3"
-                                >
-                                    <option>
-                                        Slot 1
-                                    </option>
-                                    <option>
-                                        Slot 2
-                                    </option>
-                                    <option>
-                                        Slot 2
-                                    </option>
-                                </Form.Control>
+export default function ManagerReservationDetail() {
+  const param = useParams();
+  const [reservationsDetail, setReservationDetails] = useState([]);
+  //   handleSearch()
 
-                                <Form.Control
-                                    as="select"
-                                    name="selected"
-                                    className="form-control mb-3"
-                                >
-                                    <option>
-                                        Doctor 1
-                                    </option>
-                                    <option>
-                                        Doctor 2
-                                    </option>
-                                    <option>
-                                        Doctor 3
-                                    </option>
-                                </Form.Control>
-                                <Form.Control
-                                    as="select"
-                                    name="selected"
-                                    className="form-control mb-3"
-                                >
-                                    <option>
-                                        Nurse 1
-                                    </option>
-                                    <option>
-                                        Nurse 2
-                                    </option>
-                                    <option>
-                                        Nurse 3
-                                    </option>
-                                </Form.Control>
-                                <Form.Control
-                                    as="select"
-                                    name="selected"
-                                    className="form-control mb-3"
-                                >
-                                    <option>
-                                        Date 1
-                                    </option>
-                                    <option>
-                                        Date 2
-                                    </option>
-                                    <option>
-                                        Date 3
-                                    </option>
-                                </Form.Control>
-                            </div>
-                            <div className='d-flex'>
-                                <button className='btn btn-outline-success'>Filte By Price</button>
-                                <Form.Control
-                                    type="number"
-                                    placeholder="pice start"
-                                    className='w-25'
-                                />
-                                <Form.Control
-                                    type="number"
-                                    placeholder="pice end"
-                                    className='w-25'
+  useEffect(() => {
+    handleSearch();
+  }, []);
 
-                                />
-                            </div>
-
-                            <h3 className="text-dark text-center">Reservation</h3>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col>
-                            <Table className='table-striped'>
-                                <thead>
-                                    <tr>
-                                        <th>Reservation Detail ID</th>
-                                        <th>Begin Time</th>
-                                        <th>Doctor ID</th>
-                                        <th>Num Of Person</th>
-                                        <th>NurseID</th>
-                                        <th>Quantity</th>
-                                        <th>Slot</th>
-                                        <th>UserrID</th>
-                                        <th>Action</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>12/12/2020</td>
-                                        <td>1</td>
-                                        <td>3</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>
-                                            <button className='btn btn-outline-warning'>Detail</button>
-
-                                        </td>
-                                        <td>
-                                            <button className='btn btn-outline-danger'>Cancel</button>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>12/12/2020</td>
-                                        <td>1</td>
-                                        <td>3</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>
-                                            <button className='btn btn-outline-warning'>Detail</button>
-
-                                        </td>
-                                        <td>
-                                            <button className='btn btn-outline-danger'>Cancel</button>
-                                        </td>
-
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>12/12/2020</td>
-                                        <td>1</td>
-                                        <td>3</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>1</td>
-                                        <td>
-                                            <button className='btn btn-outline-warning'>Detail</button>
-
-                                        </td>
-                                        <td>
-                                            <button className='btn btn-outline-danger'>Cancel</button>
-                                        </td>
-
-                                    </tr>
-                                </tbody>
-                            </Table>
-                        </Col>
-                    </Row>
-                </div>
-            </Container>
-        </UserTemplate>
-    )
+  const handleSearch = () => {
+    let url = `http://localhost:8080/api/ccg1/reservationDetail/` + param.id;
+    console.log(url);
+    fetch(url)
+      .then((res) => res.json())
+      .then((result) => {
+        setReservationDetails(result);
+        console.log(result);
+        // setReservations(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Lưu ý tháng trong JavaScript bắt đầu từ 0, nên cần cộng thêm 1
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  return (
+    <UserTemplate>
+      <Container>
+        <div className="bg-white vh-100 shadow p-5">
+          <Row className="mb-3">
+            <Col xs={12}>
+              <h3 className="text-dark text-center">Reservation Detail</h3>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Table className="table-striped">
+                <thead>
+                  <tr>
+                    <th>Reservation Detail ID</th>
+                    <th>Begin Time</th>
+                    <th>Doctor </th>
+                    <th>Nurse</th>
+                    <th>Num Of Person</th>
+                    <th>Quantity</th>
+                    <th>Slot</th>  
+                  </tr>
+                </thead>
+                <tbody>
+                  {reservationsDetail.map((p, index) => (
+                    <tr>
+                      <td>{index+1}</td>
+                      <td>{formatDate(p.beginTime)}</td>
+                      <td>{p.docterName}</td>
+                      <td>{p.nurseName}</td>
+                      <td>{p.numOfPerson}</td>
+                      <td>{p.quantity}</td>
+                      <td>{p.slot}</td> 
+                      
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+        </div>
+      </Container>
+    </UserTemplate>
+  );
 }
-
-export default ManagerReservationDetail

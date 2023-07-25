@@ -42,7 +42,7 @@ function App() {
             <Route path="/logout" element={<Register />} />
             <Route path="/manager_account" element={<ManagerAccountList />} />
             <Route path="/manager_reservation" element={<ManagerReservation />} />
-            <Route path="/manager_reservation_detail" element={<ManagerReservationDetail />} />
+            <Route path="/manager_reservation_detail/:id" element={<ManagerReservationDetail />} />
             <Route path="/list_user" element={<UserList />} />
             <Route path="/add_service" element={<AddService />} />
             <Route path="/edit" element={<EditList />} />

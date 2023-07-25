@@ -11,7 +11,7 @@ export default function Home() {
   let [searchstatus, setSearchstatus] = useState(-1);
   let [searchorder, setSearchorder] = useState(-1);
   let [currentpage, setcurrentpage] = useState(1);
-  const pagesize = 100;
+  const pagesize = 8;
   let totalsize;
   var maxpage = 1;
 
@@ -26,7 +26,7 @@ export default function Home() {
   let [detail, setdetail] = useState("");
   let [vote, setvote] = useState("");
   let [imagelink, setimagelink] = useState("");
-  let [status, setstatus] = useState("");
+  let [status, setstatus] = useState(1);
   let [submit, setsubmit] = useState("");
   let currentselect;
 

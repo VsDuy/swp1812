@@ -124,63 +124,47 @@ export default function Menu() {
                 Cart
               </Nav.Link>
             </li>
-            {user != null ? (
-              user.userID != null ? (
-                <>
-                  <li className="nav-item">
-                    <Link
-                      className="btn btn-#fff ms-lg-2"
-                      to={`/profileUser/2`}
-                    >
-                      <div>
-                        <img
-                          style={{
-                            height: "40px",
-                            width: "40px",
-                            borderRadius: "50%",
-                            backgroundColor: "#fff",
-                            borderColor: "#fff",
-                            border: "2px solid #fff",
-                          }}
-                          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBONcJOzAAsu-WtDfk0Sr3QNGcTSnonIpRBQ&usqp=CAU"
-                          alt="User Avatar"
-                        />
-                      </div>
-                      <p>{user.name}</p>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li className="nav-item">
-                    <Nav.Link as={Link} to="/login">
-                      SignIn
-                    </Nav.Link>
-                  </li>
-                  <li className="nav-item">
-                    <Nav.Link as={Link} to="/logout">
-                      SignUp
-                    </Nav.Link>
-                  </li>
-                </>
-              )
-            ) : (
-                <>
-                  <li className="nav-item">
-                    <Nav.Link as={Link} to="/login">
-                      SignIn
-                    </Nav.Link>
-                  </li>
-                  <li className="nav-item">
-                    <Nav.Link as={Link} to="/logout">
-                      SignUp
-                    </Nav.Link>
-                  </li>
-                </>
-              )}
+            <>
+      {user && user.userID ? (
+        <>
+          <li className="nav-item">
+            <Link className="btn btn-#fff ms-lg-2" to={`/profileUser/2`}>
+              <div>
+                <img
+                  style={{
+                    height: "40px",
+                    width: "40px",
+                    borderRadius: "50%",
+                    backgroundColor: "#fff",
+                    borderColor: "#fff",
+                    border: "2px solid #fff",
+                  }}
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBONcJOzAAsu-WtDfk0Sr3QNGcTSnonIpRBQ&usqp=CAU"
+                  alt="User Avatar"
+                />
+              </div>
+              <p>{user.name}</p>
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+          </li>
+        </>
+      ) : (
+        <>
+          <li className="nav-item">
+            <Nav.Link as={Link} to="/login">
+              SignIn
+            </Nav.Link>
+          </li>
+          <li className="nav-item">
+            <Nav.Link as={Link} to="/logout">
+              SignUp
+            </Nav.Link>
+          </li>
+        </>
+      )}
+    </>
           </ul>
         </div>
       </div>

@@ -88,13 +88,13 @@ const Profile = () => {
                           {" "}
                           Edit Profile
                         </Link>
-                        <Link
+                        {/* <Link
                           class="nav-link btn btn-outline-primary"
                           to={`/changePassword`}
                         >
                           {" "}
                           Change Password
-                        </Link>
+                        </Link> */}
                       </div>
                     </div>
                   </div>

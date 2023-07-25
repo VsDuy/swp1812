@@ -19,6 +19,19 @@ export default function ManagerServiceList() {
   const pagesize = 100;
   let totalsize;
   var maxpage = 1;
+  const [categori, setCategori] = useState([]);
+
+  useEffect(() => {
+    let url = `http://localhost:8080/api/Category/Category/listCategory`;
+    fetch(url)
+      .then((res) => res.json())
+      .then((result) => {
+        setCategori(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
 
   //update part
   let [id, setid] = useState("");
@@ -141,7 +154,7 @@ export default function ManagerServiceList() {
       .then((res) => res.json())
       .then((result) => {
         // console.log(result.data);
-        toast.success("Delete ok")
+        toast.success("Delete ok");
         handleSearch();
       })
       .catch((error) => {
@@ -175,17 +188,21 @@ export default function ManagerServiceList() {
       imagelink: imagelink,
       status: status,
     };
-    console.log(data);
+
+    // alert(data.categoryid)
+    // console.log(data);
     Axios.post(
       "http://localhost:8080/api/Service/Service/listservices/updatervice",
       data
     )
       .then((response) => {
         handleSearch();
+        toast.success("Update ok");
         // console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
+        toast.success("Update faill");
       });
   };
 
@@ -232,7 +249,6 @@ export default function ManagerServiceList() {
               <br />
             </React.Fragment>
           ))}
-         
           <Button
             variant="outline-danger"
             onClick={() => setSearchcategory(-1)}
@@ -300,10 +316,10 @@ export default function ManagerServiceList() {
                     <th>Imagelink</th>
                     <th>Tittle</th>
                     <th>Bio</th>
-                    <th>Sategoryid</th>
                     <th>Category</th>
+                    {/* <th>Category</th> */}
                     <th>Price</th>
-                    <th>Sale Price</th>
+                    <th>Discount</th>
                     <th>Createddate</th>
                     <th colSpan={4}>Status</th>
                   </tr>
@@ -360,7 +376,21 @@ export default function ManagerServiceList() {
                       </td>
                       <td>
                         {" "}
-                        <Form.Control
+                        <select
+                          className="custom-select"
+                          id={"categoryid_" + s.service_id}
+                        >
+                          {/* Hiển thị tên bác sĩ tương ứng với item.doctor */}
+                          {categori.map((x) => (
+                            <option
+                              value={x.categoryId}
+                              selected={x.categoryId === s.categoryId}
+                            >
+                              {x.categoryName}
+                            </option>
+                          ))}
+                        </select>
+                        {/* <Form.Control
                           key={s.service_id}
                           id={"categoryid_" + s.service_id}
                           defaultValue={s.categoryid}
@@ -368,16 +398,16 @@ export default function ManagerServiceList() {
                           onChange={(e) => {
                             setcategoryid(e.target.value);
                           }}
-                        />
+                        /> */}
                       </td>
-                      <td>{s.categoryname}</td>
+                      {/* <td>{s.categoryname}</td> */}
                       <td>
                         {" "}
                         <Form.Control
                           key={s.service_id}
                           id={"price_" + s.service_id}
                           defaultValue={s.price}
-                          type="text"
+                          type="number"
                           onChange={(e) => {
                             setprice(e.target.value);
                           }}
@@ -389,7 +419,7 @@ export default function ManagerServiceList() {
                           key={s.service_id}
                           id={"discount_" + s.service_id}
                           defaultValue={s.discount}
-                          type="text"
+                          type="number"
                           onChange={(e) => {
                             setdiscount(e.target.value);
                           }}
@@ -409,7 +439,19 @@ export default function ManagerServiceList() {
                       </td>
                       <td>
                         {" "}
-                        <Form.Control
+                        <select
+                          className="custom-select"
+                          id={"statusd_" + s.service_id}
+                        >
+                          <option value={1} selected={s.status == 1}>
+                            {" "}
+                            Enable{" "}
+                          </option>
+                          <option value={0} selected={s.status == 0}>
+                            Not Enable{" "}
+                          </option>
+                        </select>
+                        {/* <Form.Control
                           key={s.service_id}
                           id={"statusd_" + s.service_id}
                           defaultValue={s.status}
@@ -417,7 +459,7 @@ export default function ManagerServiceList() {
                           onChange={(e) => {
                             setstatus(e.target.value);
                           }}
-                        />
+                        /> */}
                       </td>
                       <td>
                         <a
