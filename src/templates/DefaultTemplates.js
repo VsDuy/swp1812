@@ -8,9 +8,9 @@ export default function DefaultTemplate({className="container-fluid", title, chi
         <div className={className} style={{backgroundColor:'#e3f2fd'}}>
             <Menu/>
             <Banner/>
-            <div className="row" id="path">
+            {/* <div className="row" id="path">
                 <h3>{title}</h3>
-            </div>
+            </div> */}
             {children}
             <Footer/>
         </div>

@@ -9,37 +9,20 @@ const Cart = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [doctor, setDoctor] = useState([]);
   const [nurse, setNurse] = useState([]);
-  const [quantityList, setQuantityList] = useState({}); // Sử dụng đối tượng để lưu trữ số lượng cho từng mục trong giỏ hàng
-  const [selectedSlots, setSelectedSlots] = useState({});
-
-  var cartItem = {
-    cartId: Number,
-    serviceId: Number,
-    title: String,
-    quantity: Number,
-    numOfPerson: Number,
-    doctor: Number,
-    nurse: Number,
-    slot: Number,
-    price: Number,
-    priceService: Number,
-    userId: 1,
-    beginTime: Date,
-  };
-
-  const [editedCart, setEditedCart] = useState();
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setEditedCart({
-      ...editedCart,
-      [name]: value,
-    });
-  };
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchDataFromAPI();
   }, []);
+
+  useEffect(() => {
+    var tota = 0;
+    for (const [index, item] of services.entries()) {
+      tota += item.price
+    }
+    setTotal(tota);
+  }, [services]);
+
   const fetchDataFromAPI = async () => {
     try {
       const response = await axios.get(
@@ -87,18 +70,85 @@ const Cart = () => {
   };
 
   // Kiểm tra xem có mục nào khác trong giỏ hàng có cùng serviceId và slot không
-  const handleSlotSelection = (cartId, selectedSlot) => {
+  const handleSlotSelection = (cartId, selectedSlot, doctorId, nurseId) => {
+    handleChange(cartId, selectedSlot, doctorId, nurseId);
+    // const cartItem = services.find((item) => item.cartId == cartId);
+    // const existingItem = services.find(
+    //   (item) =>
+    //     item.cartId !== cartItem.cartId &&
+    //     item.beginTime === cartItem.beginTime &&
+    //     item.serviceId === cartItem.serviceId &&
+    //     item.slot == selectedSlot
+    // );
+    // if (existingItem) {
+    //   toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
+    // } else {
+    //   console.log(existingItem);
+    //   let foundIndex = -1; // Biến lưu chỉ số của phần tử cần cập nhật
+
+    //   // Cập nhật cartItem vào services
+    //   for (const [index, item] of services.entries()) {
+    //     if (item.cartId == cartId) {
+    //       foundIndex = index; // Lưu chỉ số của phần tử cần cập nhật
+    //       break; // Thoát khỏi vòng lặp khi tìm thấy phần tử
+    //     }
+    //   }
+
+    //   if (foundIndex != NaN && foundIndex !== -1) {
+    //     // Thực hiện cập nhật phần tử
+    //     const updatedCart = [...services]; // Tạo một bản sao của mảng services để tránh cập nhật trực tiếp vào mảng gốc
+    //     updatedCart[foundIndex].slot = selectedSlot;
+    //     setServices(updatedCart); // Cập nhật state của services với giá trị mới
+    //     localStorage.setItem("Service", JSON.stringify(updatedCart));
+    //   }
+    // }
+  };
+
+  const handleDoctorSelection = (cartId, doctorId, selectedSlot, nurseId) => {
+    handleChange(cartId, selectedSlot, doctorId, nurseId);
+  };
+  const handleNuurseSelection = (cartId, nurseId, doctorId, selectedSlot) => {
+    handleChange(cartId, selectedSlot, doctorId, nurseId);
+  };
+
+  const submitCart = async () => {
+    console.log(services);
+  };
+
+  const handleChange = async (cartId, selectedSlot, doctorId, nurseId) => {
     const cartItem = services.find((item) => item.cartId == cartId);
+    cartItem.slot = selectedSlot;
+    cartItem.doctor = doctorId;
+    cartItem.nurse = nurseId;
+    try {
+      const response = await axios.put(
+        "http://localhost:8080/api/ccg1/reservation/checkCart",
+        cartItem
+      ); // Thay 'URL_API' bằng URL API thực tế
+      console.log(response.data);
+      if (response.data === 1) {
+        toast.error("Looks like the doctor or nurse already has this schedule");
+        return;
+      } else {
+      }
+    } catch (error) {
+      return;
+    }
     const existingItem = services.find(
       (item) =>
-        item.cartId !== cartItem.cartId &&
-        item.beginTime === cartItem.beginTime &&
-        item.serviceId === cartItem.serviceId &&
-        item.slot == selectedSlot
+        (item.cartId !== cartItem.cartId &&
+          item.beginTime === cartItem.beginTime &&
+          item.serviceId === cartItem.serviceId &&
+          item.slot == selectedSlot &&
+          (item.doctor === doctorId || item.nurse === nurseId)) ||
+        (item.beginTime === cartItem.beginTime &&
+          item.slot === selectedSlot &&
+          (item.doctor === doctorId || item.nurse === nurseId))
     );
     if (existingItem) {
       toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
     } else {
+      console.log(existingItem);
       let foundIndex = -1; // Biến lưu chỉ số của phần tử cần cập nhật
 
       // Cập nhật cartItem vào services
@@ -108,18 +158,15 @@ const Cart = () => {
           break; // Thoát khỏi vòng lặp khi tìm thấy phần tử
         }
       }
-
-      if (foundIndex != NaN && foundIndex !== -1 ) {
-        // Thực hiện cập nhật phần tử 
+      if (foundIndex != NaN && foundIndex !== -1) {
+        // Thực hiện cập nhật phần tử
         const updatedCart = [...services]; // Tạo một bản sao của mảng services để tránh cập nhật trực tiếp vào mảng gốc
-        updatedCart[foundIndex].slot = selectedSlot;
+        updatedCart[foundIndex] = cartItem;
         setServices(updatedCart); // Cập nhật state của services với giá trị mới
         localStorage.setItem("Service", JSON.stringify(updatedCart));
       }
     }
   };
-
-  
 
   const handleQuantityChange = (cartId, newQuantity) => {
     if (Number.isInteger(newQuantity) && newQuantity > 0) {
@@ -200,7 +247,18 @@ const Cart = () => {
                           </td>
                           <td style={{ width: "200px" }}>
                             <div className="input-group mb-3">
-                              <select className="custom-select" id="doctor">
+                              <select
+                                className="custom-select"
+                                onChange={(e) =>
+                                  handleDoctorSelection(
+                                    item.cartId,
+                                    e.target.value,
+                                    item.slot,
+                                    item.nurse
+                                  )
+                                }
+                                value={item.doctor}
+                              >
                                 {/* Hiển thị tên bác sĩ tương ứng với item.doctor */}
                                 {doctor.map((doctor) => (
                                   <option
@@ -216,7 +274,18 @@ const Cart = () => {
                           </td>
                           <td style={{ width: "200px" }}>
                             <div className="input-group mb-3">
-                              <select className="custom-select" id="nurse">
+                              <select
+                                className="custom-select"
+                                onChange={(e) =>
+                                  handleNuurseSelection(
+                                    item.cartId,
+                                    e.target.value,
+                                    item.doctor,
+                                    item.slot
+                                  )
+                                }
+                                value={item.nurse}
+                              >
                                 {/* Hiển thị tên y tá tương ứng với item.nurse */}
                                 {nurse.map((nurse) => (
                                   <option
@@ -237,7 +306,9 @@ const Cart = () => {
                                 onChange={(e) =>
                                   handleSlotSelection(
                                     item.cartId,
-                                    e.target.value
+                                    e.target.value,
+                                    item.doctor,
+                                    item.nurse
                                   )
                                 }
                                 value={item.slot}
@@ -271,7 +342,13 @@ const Cart = () => {
                       ))}
                     </tbody>
                   </Table>
-                  <button className="btn btn-primary float-right">
+                  <h4>Total</h4>
+                  <button
+                    onClick={() => {
+                      submitCart();
+                    }}
+                    className="btn btn-primary float-right"
+                  >
                     Thanh toán
                   </button>
                 </>
