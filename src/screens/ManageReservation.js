@@ -5,7 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 
 
-const manager_reservation_detail = () => {
+const ManagerReservation = () => {
+    
     return (
         <UserTemplate>
             <Container>
@@ -130,4 +131,4 @@ const manager_reservation_detail = () => {
     )
 }
 
-export default manager_reservation_detail
+export default ManagerReservation

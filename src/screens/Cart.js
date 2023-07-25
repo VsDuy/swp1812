@@ -179,28 +179,30 @@ const Cart = () => {
           (item.cartId !== cartItemSub.cartId &&
             item.beginTime === cartItemSub.beginTime &&
             item.serviceId === cartItemSub.serviceId &&
-            item.slot === cartItemSub.slot ) ||
-          (item.beginTime === cartItemSub.beginTime &&
-            item.slot === cartItemSub.slot &&
-            (item.doctor == cartItemSub.doctor ||
-              item.nurse == cartItemSub.nurse))
+            item.slot === cartItemSub.slot) ||
+            (item.beginTime === cartItemSub.beginTime &&
+              item.slot === cartItemSub.slot &&
+              (item.doctor == cartItemSub.doctor ||
+                item.nurse == cartItemSub.nurse))
         );
         if (
           (item.cartId !== cartItemSub.cartId &&
             item.beginTime === cartItemSub.beginTime &&
             item.serviceId === cartItemSub.serviceId &&
-            item.slot === cartItemSub.slot ) ||
+            item.slot === cartItemSub.slot) ||
           (item.beginTime === cartItemSub.beginTime &&
             item.slot === cartItemSub.slot &&
             (item.doctor == cartItemSub.doctor ||
               item.nurse == cartItemSub.nurse))
         ) {
-          document.getElementById("cart_" + cartItemSub.cartId).style.backgroundColor =
-            "#dbb9b6";
+          document.getElementById(
+            "cart_" + cartItemSub.cartId
+          ).style.backgroundColor = "#dbb9b6";
           checkSubmit = false;
         } else {
-          document.getElementById("cart_" + cartItemSub.cartId).style.backgroundColor =
-            "";
+          document.getElementById(
+            "cart_" + cartItemSub.cartId
+          ).style.backgroundColor = "";
         }
       }
     }
@@ -228,26 +230,36 @@ const Cart = () => {
         }
       }
 
-      if (checkSubmit) {
-        var cartDto = {
-          cards: services,
-          total: total,
-          note: "",
-          userId: 1,
-        };
-        console.log("a" + JSON.stringify(cartDto));
-        try {
-          const response = await axios.put(
-            "http://localhost:8080/api/ccg1/reservation/checkCart",
-            cartDto
-          ); // Thay 'URL_API' bằng URL API thực tế
-          console.log(response.data);
-          if (response.data === 1) {
-            // Xử lý thành công
+      const token = localStorage.getItem("token");
+      console.log(token)
+      if (token == null || token == 'null') {
+        toast.error("You need to login");
+        return;
+      } else {
+        if (checkSubmit) {
+          var cartDto = {
+            cards: services,
+            total: total,
+            note: "",
+            userId: token,
+          };
+          console.log(cartDto);
+          try {
+            const response = await axios.put(
+              "http://localhost:8080/api/ccg1/reservation/addCart",
+              cartDto
+            ); // Thay 'URL_API' bằng URL API thực tế
+            console.log(response.data);
+            if (response.data === 1) {
+              // Xử lý thành công
+              toast.success("Dat hang thanh cong")
+              setIsLoading(true)
+              localStorage.removeItem("Service");
+            }
+          } catch (error) {
+            // Xử lý lỗi
+            return;
           }
-        } catch (error) {
-          // Xử lý lỗi
-          return;
         }
       }
     }
@@ -269,7 +281,6 @@ const Cart = () => {
     nurseId,
     date
   ) => {
- 
     const cartItem = services.find((item) => item.cartId == cartId);
     cartItem.slot = selectedSlot;
     cartItem.doctor = doctorId;
@@ -298,7 +309,7 @@ const Cart = () => {
     );
     if (existingItem) {
       toast.error("Can't set repeat slot or doctor,nurse in slot  on same day");
-    } else { 
+    } else {
       // console.log(existingItem);
       let foundIndex = -1; // Biến lưu chỉ số của phần tử cần cập nhật
 
@@ -338,24 +349,24 @@ const Cart = () => {
               (item.cartId !== cartItemSub.cartId &&
                 item.beginTime === cartItemSub.beginTime &&
                 item.serviceId === cartItemSub.serviceId &&
-                item.slot === cartItemSub.slot ) ||
+                item.slot === cartItemSub.slot) ||
               (item.beginTime === cartItemSub.beginTime &&
                 item.slot === cartItemSub.slot &&
                 (item.doctor == cartItemSub.doctor ||
                   item.nurse == cartItemSub.nurse))
             ) {
-              document.getElementById("cart_" + cartItemSub.cartId).style.backgroundColor =
-                "#dbb9b6";
+              document.getElementById(
+                "cart_" + cartItemSub.cartId
+              ).style.backgroundColor = "#dbb9b6";
             } else {
-              document.getElementById("cart_" + cartItemSub.cartId).style.backgroundColor =
-                "";
+              document.getElementById(
+                "cart_" + cartItemSub.cartId
+              ).style.backgroundColor = "";
             }
           }
         }
-
       }
     }
-
   };
 
   const handleQuantityChange = (cartId, newQuantity) => {

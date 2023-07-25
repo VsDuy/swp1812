@@ -133,7 +133,7 @@ export default function ProfileUser() {
                       <label className="ml-2">Female</label>
                     </div>
                   </div>
-                  <div className="form-group">
+                  {/* <div className="form-group">
                     <label>Role</label>
                     <select
                       className="form-control"
@@ -147,7 +147,7 @@ export default function ProfileUser() {
                         </option>
                       ))}
                     </select>
-                  </div>
+                  </div> */}
                   <div className="mt-5 text-center">
                     <button
                       className="btn btn-primary profile-button"

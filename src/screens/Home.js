@@ -128,7 +128,7 @@ export default function Home() {
                 <p style={{ fontSize: 12 }}>{s.bi}</p>
               </Link>
               <Button variant="outline-success" href="#">
-                Add
+                Detail
               </Button>{" "}
               <br></br>
             </div>

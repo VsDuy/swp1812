@@ -24,6 +24,7 @@ import ManagerReservationDetail from "./screens/ManagerReservationDetail";
 import EditProfileUser from "./screens/EditProfileUser";
 import ProfileUser from "./screens/Profile";
 import ChangePassword from "./screens/ChangePassword";
+import ManagerReservation from "./screens/ManageReservation";
 
 export const ApplicationContext = React.createContext([]);
 
@@ -40,7 +41,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Register />} />
             <Route path="/manager_account" element={<ManagerAccountList />} />
-            <Route path="/manager_reservation" element={<ManageReservation />} />
+            <Route path="/manager_reservation" element={<ManagerReservation />} />
             <Route path="/manager_reservation_detail" element={<ManagerReservationDetail />} />
             <Route path="/list_user" element={<UserList />} />
             <Route path="/add_service" element={<AddService />} />

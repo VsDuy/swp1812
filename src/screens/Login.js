@@ -43,14 +43,15 @@ export default function Login() {
 
       // if()
       const { data } = response;
+      console.log(data)
       // console.log(JSON.stringify(data));
-      const user = data.user;
+      const user = data.userID;
       
       if (!user) {
         toast.error("Email and password are incorrect");
       }else{
         toast.success("login success");
-        localStorage.setItem("token", user.token);
+        localStorage.setItem("token", user);
         nav("/");
       }
     } catch (error) {
