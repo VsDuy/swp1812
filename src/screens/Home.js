@@ -117,7 +117,7 @@ export default function Home() {
         >
           Special
         </h3>
-        <div className="row content d-flex justify-content-around border-none" id="home">
+        <div style={{ border: "none" }} className="row content d-flex justify-content-around" id="home">
           {service.map((s) => (
             <div style={{ width: 300 }} className="product bg-white me-3 mb-3 d-flex flex-column justify-contnt-cente align-items-center border-none">
               <Link to={`/service_detail/${s.service_id}`}>
