@@ -19,7 +19,6 @@ import "react-toastify/dist/ReactToastify.css";
 import ServiceDetail from "./screens/ServiceDetail";
 import EditAccount from "./screens/EditAccount";
 import AddAccount from "./screens/AddUser";
-import ProfileUser from "./screens/ProfileUser";
 import ManageReservation from "./screens/ManageReservation";
 import ManagerReservationDetail from "./screens/ManagerReservationDetail";
 import EditProfileUser from "./screens/EditProfileUser";
