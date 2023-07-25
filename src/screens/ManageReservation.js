@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import UserTemplate from "../templates/UserTemplate";
 import { Container, Row, Col, Table, Form, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 
 
-const ManagerReservation = () => {
-    
+export default function ManagerReservation() {
+    const [status, setStatus] = useState(0);
+    const [date, setDate] = useState("");
+
     return (
         <UserTemplate>
             <Container>
@@ -130,5 +132,3 @@ const ManagerReservation = () => {
         </UserTemplate>
     )
 }
-
-export default ManagerReservation

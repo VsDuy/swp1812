@@ -127,9 +127,11 @@ export default function Home() {
                 <h5 className="text-center" style={{ fontSize: 18, color: "blue" }}>{s.title}</h5>
                 <p style={{ fontSize: 12 }}>{s.bi}</p>
               </Link>
-              <Button variant="outline-success" href="#">
+               
+              <Button type="button" variant="outline-success" href={`/service_detail/${s.service_id}`}>
                 Detail
               </Button>{" "}
+               
               <br></br>
             </div>
           ))}
